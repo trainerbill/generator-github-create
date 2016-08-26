@@ -2,7 +2,6 @@ import { createRepository } from '../github';
 import * as shell from '../shell';
 
 export function install(generator) {
-  console.log('Install', generator.config.confirm);
   if (generator.config.confirm) {
     return createRepository(generator)
       .then(() => init(generator));
