@@ -15,7 +15,6 @@ var shell = _interopRequireWildcard(_shell);
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function install(generator) {
-  console.log('Install', generator.config.confirm);
   if (generator.config.confirm) {
     return (0, _github.createRepository)(generator).then(() => init(generator));
   }
