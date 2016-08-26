@@ -108,10 +108,9 @@ class GitGenerator extends _yeomanGenerator.Base {
       console.log(_chalk2.default.red('Cannot find git email.  You should set: git config --global user.email "your_email@example.com" '));
     }
     return this.github.search.users({ q: this.user.git.email() + ' in:email' }).then(user => {
-      user.items.push({ login: 'testy' });
-      user.total_count = 2;
       if (user.total_count === 1) {
         this.config.user = user.items[0];
+        this.config.username = user.items[0].login;
       } else if (user.total_count > 1) {
         let choices = user.items.map(function (item) {
           return { name: item['login'], value: user.items.indexOf(item) };
