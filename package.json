@@ -1,0 +1,41 @@
+{
+  "name": "@modern-mean/generator-git",
+  "version": "0.0.1",
+  "description": "Yeoman generator for github initialization",
+  "keywords": "yeoman, generator, github, repository",
+  "main": "generators/app/index.js",
+  "files": [
+    "generators/app"
+  ],
+  "engines": {
+    "node": ">=6.4",
+    "npm": ">=3.10.3"
+  },
+  "scripts": {
+    "coverage": "gulp test:coverage",
+    "test": "gulp test",
+    "build": "gulp build",
+    "postversion": "git push && git push --tags && npm publish --access public",
+    "release:patch": "npm test && npm run build && npm version patch",
+    "release:minor": "npm test && npm run build && npm version minor",
+    "release:major": "npm test && npm run build && npm version major"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/modern-mean/generator-git.git"
+  },
+  "author": "Andrew Throener",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/modern-mean/generator-git/issues"
+  },
+  "homepage": "https://github.com/modern-mean/generator-git#readme",
+  "dependencies": {
+    "github": "^2.5.2",
+    "lodash.find": "^4.6.0",
+    "yeoman-generator": "^0.24.1"
+  },
+  "devDependencies": {
+    "@modern-mean/build-gulp": "~0.0.29"
+  }
+}
