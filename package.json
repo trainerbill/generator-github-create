@@ -31,8 +31,11 @@
   },
   "homepage": "https://github.com/modern-mean/generator-git#readme",
   "dependencies": {
+    "@modern-mean/server-config-module": "0.0.9",
     "github": "^2.5.2",
     "lodash.find": "^4.6.0",
+    "lodash.merge": "^4.6.0",
+    "shelljs": "^0.7.4",
     "yeoman-generator": "^0.24.1"
   },
   "devDependencies": {
