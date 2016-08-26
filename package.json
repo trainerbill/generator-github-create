@@ -1,6 +1,6 @@
 {
   "name": "@modern-mean/generator-git",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Yeoman generator for github initialization",
   "keywords": "yeoman, generator, github, repository",
   "main": "generators/app/index.js",
