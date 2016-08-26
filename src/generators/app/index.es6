@@ -1,6 +1,6 @@
 import { Base } from 'yeoman-generator';
 import chalk from 'chalk';
-import GitHubApi  from 'github';
+import GitHubApi from 'github';
 import { find } from 'lodash';
 
 class GitGenerator extends Base {
@@ -27,7 +27,7 @@ class GitGenerator extends Base {
 
     this.prompts = {
       search: [{
-        when: (answers) => { return answers.userSelect === 'Other' },
+        when: (answers) => { return answers.userSelect === 'Other'; },
         name: 'username',
         message: 'Github Username'
       }],
@@ -37,12 +37,12 @@ class GitGenerator extends Base {
         message : 'Github Password'
       }],
       authorization: [{
-        when: (answers) => { return answers.fulltoken },
+        when: (answers) => { return answers.fulltoken; },
         name: 'token',
         message: 'Enter your full token'
       },
       {
-        when: (answers) => { return !answers.fulltoken },
+        when: (answers) => { return !answers.fulltoken; },
         type: 'confirm',
         name: 'delete',
         message: 'In order to proceed we need to delete the old authorization and create a new one.  This should not mess anything up.  Proceed?',
@@ -76,7 +76,7 @@ class GitGenerator extends Base {
       },
       {
         type: 'list',
-        name: "license",
+        name: 'license',
         message: 'License',
         choices: [{
           name: 'ISC',
@@ -92,7 +92,7 @@ class GitGenerator extends Base {
         }]
 
       }]
-    }
+    };
 
   }
 
@@ -107,7 +107,7 @@ class GitGenerator extends Base {
         if (user.total_count === 1) {
           this.config.user = user.items[0];
         } else if (user.total_count > 1) {
-          let choices = user.items.map(function(item) { return { name: item['login'], value: user.items.indexOf(item) } });
+          let choices = user.items.map(function(item) { return { name: item['login'], value: user.items.indexOf(item) }; });
           choices.push('Other');
           this.prompts.search.unshift({
             type: 'list',
@@ -140,14 +140,14 @@ class GitGenerator extends Base {
         .then(() => {
 
           this.github.authenticate({
-            type: "basic",
+            type: 'basic',
             username: this.config.username,
             password: this.config.password
           });
 
           return this.github.authorization.getAll({
-              page: "1",
-              per_page: "100"
+            page: '1',
+            per_page: '100'
           }, (err, auths) => {
             this.config.authorization.current = find(auths, { app: { name: this.config.authorization.name } }) || undefined;
             if (this.config.authorization.current) {
@@ -161,7 +161,7 @@ class GitGenerator extends Base {
                 if (answers.token) {
                   this.config.authorization.token = answers.token;
                   return resolve();
-                } else  {
+                } else {
                   this.github.authorization.delete({ id: this.config.authorization.current.id }, (err, res) => {
                     if (err) {
                       return reject(err);
@@ -182,18 +182,18 @@ class GitGenerator extends Base {
     return new Promise((resolve, reject) => {
 
       this.github.authorization.create({
-          scopes: ["user", "public_repo", "repo", "repo:status"],
-          note: "@modern-mean/generator-git",
-          note_url: "http://localhost",
-          headers: {
-              "X-GitHub-OTP": "two-factor-code"
-          }
+        scopes: ['user', 'public_repo', 'repo', 'repo:status'],
+        note: this.config.authorization.name,
+        note_url: 'https://github.com/modern-mean/generator-git',
+        headers: {
+          'X-GitHub-OTP': 'two-factor-code'
+        }
       }, (err, res) => {
-          if(err) {
-            return reject(err);
-          }
-          this.config.authorization.token = res.token;
-          return resolve();
+        if(err) {
+          return reject(err);
+        }
+        this.config.authorization.token = res.token;
+        return resolve();
       });
     });
 
@@ -202,8 +202,8 @@ class GitGenerator extends Base {
   githubOrgs() {
     return new Promise((resolve, reject) => {
       this.github.users.getOrgs({
-        page: "1",
-        per_page: "100"
+        page: '1',
+        per_page: '100'
       }, (err, orgs) => {
         if (err) {
           return reject(err);
@@ -211,9 +211,9 @@ class GitGenerator extends Base {
 
         //Add org prompt if user is part of an organziation
         if(orgs.length > 0) {
-          let choices = orgs.map(function(item) { return { name: item['login'], value: orgs.indexOf(item) } });
+          let choices = orgs.map(function(item) { return { name: item['login'], value: orgs.indexOf(item) }; });
           this.prompts.orgs.push({
-            when: (answers) => { return answers.isOrg },
+            when: (answers) => { return answers.isOrg; },
             type: 'list',
             name: 'orgSelect',
             message: 'Select your organization',
@@ -241,7 +241,7 @@ class GitGenerator extends Base {
   getRepos() {
     return new Promise((resolve, reject) => {
       if(this.config.org) {
-        this.github.repos.getForOrg({ org: this.config.org.login, page: "1", per_page: "100" }, (err, res) => {
+        this.github.repos.getForOrg({ org: this.config.org.login, page: '1', per_page: '100' }, (err, res) => {
           if (err) {
             return reject(err);
           }
@@ -249,12 +249,12 @@ class GitGenerator extends Base {
           return resolve();
         });
       } else {
-        this.github.repos.getForUser({ user: this.config.username, page: "1", per_page: "100" }, (err, res) => {
+        this.github.repos.getForUser({ user: this.config.username, page: '1', per_page: '100' }, (err, res) => {
           if (err) {
             return reject(err);
           }
           this.config.repos = res;
-          return resolve()
+          return resolve();
         });
       }
     });
@@ -280,7 +280,7 @@ class GitGenerator extends Base {
       this.prompt([{
         type    : 'confirm',
         name    : 'create',
-        message : 'Create the following Repo?  name: ' + this.repoAnswers.name + ((this.config.org) ? 'org: ' + this.config.org.login : 'user: ' + this.config.username )
+        message : 'Create the following Repo?  name: ' + this.repoAnswers.name + ((this.config.org) ? 'org: ' + this.config.org.login : 'user: ' + this.config.username)
       }])
         .then(answers => {
           if (!answers.create) {

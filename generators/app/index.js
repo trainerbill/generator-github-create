@@ -86,7 +86,7 @@ class GitGenerator extends _yeomanGenerator.Base {
         }]
       }, {
         type: 'list',
-        name: "license",
+        name: 'license',
         message: 'License',
         choices: [{
           name: 'ISC',
@@ -144,14 +144,14 @@ class GitGenerator extends _yeomanGenerator.Base {
       }).then(() => {
 
         this.github.authenticate({
-          type: "basic",
+          type: 'basic',
           username: this.config.username,
           password: this.config.password
         });
 
         return this.github.authorization.getAll({
-          page: "1",
-          per_page: "100"
+          page: '1',
+          per_page: '100'
         }, (err, auths) => {
           this.config.authorization.current = (0, _lodash.find)(auths, { app: { name: this.config.authorization.name } }) || undefined;
           if (this.config.authorization.current) {
@@ -185,11 +185,11 @@ class GitGenerator extends _yeomanGenerator.Base {
     return new Promise((resolve, reject) => {
 
       this.github.authorization.create({
-        scopes: ["user", "public_repo", "repo", "repo:status"],
-        note: "@modern-mean/generator-git",
-        note_url: "http://localhost",
+        scopes: ['user', 'public_repo', 'repo', 'repo:status'],
+        note: this.config.authorization.name,
+        note_url: 'https://github.com/modern-mean/generator-git',
         headers: {
-          "X-GitHub-OTP": "two-factor-code"
+          'X-GitHub-OTP': 'two-factor-code'
         }
       }, (err, res) => {
         if (err) {
@@ -204,8 +204,8 @@ class GitGenerator extends _yeomanGenerator.Base {
   githubOrgs() {
     return new Promise((resolve, reject) => {
       this.github.users.getOrgs({
-        page: "1",
-        per_page: "100"
+        page: '1',
+        per_page: '100'
       }, (err, orgs) => {
         if (err) {
           return reject(err);
@@ -242,7 +242,7 @@ class GitGenerator extends _yeomanGenerator.Base {
   getRepos() {
     return new Promise((resolve, reject) => {
       if (this.config.org) {
-        this.github.repos.getForOrg({ org: this.config.org.login, page: "1", per_page: "100" }, (err, res) => {
+        this.github.repos.getForOrg({ org: this.config.org.login, page: '1', per_page: '100' }, (err, res) => {
           if (err) {
             return reject(err);
           }
@@ -250,7 +250,7 @@ class GitGenerator extends _yeomanGenerator.Base {
           return resolve();
         });
       } else {
-        this.github.repos.getForUser({ user: this.config.username, page: "1", per_page: "100" }, (err, res) => {
+        this.github.repos.getForUser({ user: this.config.username, page: '1', per_page: '100' }, (err, res) => {
           if (err) {
             return reject(err);
           }
