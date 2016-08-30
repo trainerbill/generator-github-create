@@ -10,21 +10,21 @@ class GitGenerator extends Base {
 
   initializing() {
     logger.debug('App::initializing::Start');
-    //this.composeWith('@modern-mean/git:authenticate', { options: { GitHubAPI: { debug: true } } });
-    this.composeWith('@modern-mean/git:authenticate');
-    this.composeWith('@modern-mean/git:orgs');
+    //this.composeWith('github-create:authenticate', { options: { GitHubAPI: { debug: true } } });
+    this.composeWith('github-create:authenticate');
+    this.composeWith('github-create:orgs');
     logger.debug('App::Initializing::End');
   }
 
   install() {
     logger.debug('App::Install::Start');
-    this.composeWith('@modern-mean/git:create');
+    this.composeWith('github-create:create');
     logger.debug('App::Install::End');
   }
 
   end() {
     logger.debug('App::End::Start');
-    this.composeWith('@modern-mean/git:git');
+    this.composeWith('github-create:git');
     logger.debug('App::End::End');
   }
 

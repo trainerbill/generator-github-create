@@ -20,21 +20,21 @@ class GitGenerator extends _yeomanGenerator.Base {
 
   initializing() {
     _logger2.default.debug('App::initializing::Start');
-    //this.composeWith('@modern-mean/git:authenticate', { options: { GitHubAPI: { debug: true } } });
-    this.composeWith('@modern-mean/git:authenticate');
-    this.composeWith('@modern-mean/git:orgs');
+    //this.composeWith('github-create:authenticate', { options: { GitHubAPI: { debug: true } } });
+    this.composeWith('github-create:authenticate');
+    this.composeWith('github-create:orgs');
     _logger2.default.debug('App::Initializing::End');
   }
 
   install() {
     _logger2.default.debug('App::Install::Start');
-    this.composeWith('@modern-mean/git:create');
+    this.composeWith('github-create:create');
     _logger2.default.debug('App::Install::End');
   }
 
   end() {
     _logger2.default.debug('App::End::Start');
-    this.composeWith('@modern-mean/git:git');
+    this.composeWith('github-create:git');
     _logger2.default.debug('App::End::End');
   }
 
