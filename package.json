@@ -5,7 +5,12 @@
   "keywords": "yeoman-generator, yeoman, generator, github, repository",
   "main": "generators/app/index.js",
   "files": [
-    "generators/app"
+    "generators/app",
+    "generators/authenticate",
+    "generators/setup",
+    "generators/create",
+    "generators/orgs",
+    "generators/git"
   ],
   "engines": {
     "node": ">=6.4",
@@ -36,6 +41,7 @@
     "lodash.find": "^4.6.0",
     "lodash.merge": "^4.6.0",
     "shelljs": "^0.7.4",
+    "winston": "^2.2.0",
     "yeoman-generator": "^0.24.1"
   },
   "devDependencies": {
