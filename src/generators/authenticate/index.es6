@@ -42,7 +42,7 @@ class GithubAuthenticateGenerator extends Base {
   }
 
   initializing() {
-    logger.debug("Authenticate::Initializing::Start");
+    logger.debug('Authenticate::Initializing::Start');
     //Initialize Github API
     github.get() || github.init(this.options.GitHubAPI);
 
@@ -65,8 +65,12 @@ class GithubAuthenticateGenerator extends Base {
       .then(() => github.createAuthorization(this.options.appName, this.options.appUrl))
       .then(() => {
         this.config.save();
-        logger.debug("Authenticate::Initializing::End");
+        logger.debug('Authenticate::Initializing::End');
       });
+  }
+
+  install() {
+    logger.debug('Authenticate::Install::Start');
   }
 
 }

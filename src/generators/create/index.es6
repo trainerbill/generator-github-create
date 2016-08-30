@@ -13,7 +13,7 @@ class GitCreateGenerator extends Base {
   }
 
   initializing() {
-    logger.debug("Create::Initializing::Start");
+    logger.debug('Create::Initializing::Start');
     this.tempConfig = {};
     //Authenticate Github API
     if (!github.get()) {
@@ -23,11 +23,11 @@ class GitCreateGenerator extends Base {
     if(!this.config.get('orgs')) {
       this.config.set('orgs', {});
     }
-
+    logger.debug('Create::Initializing::End');
   }
 
   prompting() {
-    logger.debug("Create::Prompting::Start");
+    logger.debug('Create::Prompting::Start');
     return github.getRepos(this.config.get('authenticate'), this.config.get('orgs'))
       .then(repos => this.prompt(prompts.repository(repos)))
       .then(answers => {
@@ -35,22 +35,23 @@ class GitCreateGenerator extends Base {
       })
       .then(() => {
         this.config.set('create', this.tempConfig);
-        logger.debug("Create::Prompting::End", this.config.get('create'));
+        logger.debug('Create::Prompting::End', this.config.get('create'));
       });
   }
 
   configuring() {
-    logger.debug("Create::Configuring::Start");
+    logger.debug('Create::Configuring::Start');
     this.config.save();
+    logger.debug('Create::Configuring::End');
   }
 
   install() {
-    logger.debug("Create::Install::Start");
+    logger.debug('Create::Install::Start');
     return github.createRepository(this.config.get('create'), this.config.get('orgs'))
       .then(repo => {
         this.config.set(merge(this.config.get('create'), { repository: { http_url: repo.html_url, ssh_url: repo.ssh_url } }));
         this.config.save();
-        logger.debug("Create::Install::End");
+        logger.debug('Create::Install::End');
       });
   }
 

@@ -1,7 +1,10 @@
 import { checkRemote } from '../shared/shell';
 
 export function git(config) {
-  let choices = Object.keys(config.repository).map(function(item) { return config.repository[item] });
+  let choices = [];;
+  if (config.repository) {
+    choices = Object.keys(config.repository).map(item => { return config.repository[item]; });
+  }
 
   return [
     {
@@ -14,7 +17,7 @@ export function git(config) {
       when    : (answers) => { return choices.length === 0; },
       name    : 'url',
       message : 'Remote Url',
-      default : config.url
+      default : config.url || ''
     },
     {
       when    : (answers) => { return choices.length > 0; },
@@ -22,7 +25,7 @@ export function git(config) {
       name    : 'url',
       choices : choices,
       message : 'Remote Url',
-      default : config.url
+      default : config.url || ''
     },
     {
       type    : 'confirm',
@@ -37,17 +40,17 @@ export function git(config) {
       default : 'Y'
     },
     {
-      when    : (answers) => { return answers.commit },
+      when    : (answers) => { return answers.commit; },
       name    : 'message',
       message : 'Commit Message',
       default : 'Initial Commit',
     },
     {
-      when    : (answers) => { return answers.commit },
+      when    : (answers) => { return answers.commit; },
       type    : 'confirm',
       name    : 'push',
       message : 'Push Repository?',
       default : 'Y'
     }
-  ]
+  ];
 }

@@ -26,34 +26,26 @@ class GithubOrgsGenerator extends _yeomanGenerator.Base {
 
   constructor(...args) {
     super(...args);
-    /*
-    //Options
-    this.option('GitHubAPI', {
-      required: false,
-      defaults: {},
-      desc: 'GitHubAPI Configuration'
-    });
-    */
   }
 
   initializing() {
-    _logger2.default.debug("Orgs::Initializing::Start");
+    _logger2.default.debug('Orgs::Initializing::Start');
     //Authenticate Github API
     if (!github.get()) {
       this.composeWith('@modern-mean/git:authenticate');
     }
+    _logger2.default.debug('Orgs::Initializing::End');
   }
 
   prompting() {
-    _logger2.default.debug("Orgs::Prompting::Start");
+    _logger2.default.debug('Orgs::Prompting::Start');
     return github.getOrgs().then(orgs => {
       this.orgs = orgs;
       return this.prompt(prompts.orgs(orgs));
     }).then(answers => {
-      //TODO .login is causing issues when answer is no on prompt
-      this.config.set('orgs', { org: this.orgs[answers.org].login });
-      _logger2.default.debug("Orgs::Prompting::End");
+      this.config.set('orgs', answers);
       this.config.save();
+      _logger2.default.debug('Orgs::Prompting::End');
     });
   }
 

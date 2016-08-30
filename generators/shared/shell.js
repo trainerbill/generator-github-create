@@ -10,7 +10,6 @@ exports.saveUsername = saveUsername;
 exports.gitInit = gitInit;
 exports.gitRemote = gitRemote;
 exports.gitRemotes = gitRemotes;
-exports.checkRemote = checkRemote;
 exports.gitPull = gitPull;
 exports.gitCommit = gitCommit;
 exports.gitPush = gitPush;
@@ -44,9 +43,6 @@ function saveUsername(username) {
 };
 
 function gitInit(config) {
-  if (!config.init) {
-    return true;
-  }
   return new Promise((resolve, reject) => {
     if (_shelljs2.default.which('git')) {
       _shelljs2.default.exec('git init', { silent: true }, (code, stdout, stderr) => {
@@ -80,22 +76,6 @@ function gitRemotes() {
     }
   });
 };
-
-function checkRemote(name) {
-  return new Promise((resolve, reject) => {
-    gitRemotes().then(remotes => {
-      //console.log(remotes);
-      let regex = new RegExp('^' + name + '\t');
-      remotes.forEach(remote => {
-        if (regex.test(remote)) {
-          console.log('Exists!!!!');
-          resolve('Remote name already exists');
-        }
-      });
-      resolve(true);
-    });
-  });
-}
 
 function gitPull(config) {
   if (!config.pull) {

@@ -1,15 +1,15 @@
 export function orgs(orgs) {
-  let choices = orgs.map(function(item) { return { name: item['login'], value: orgs.indexOf(item) }; });
+  let choices = orgs.map(function(item) { return item.login; });
   return [
     {
-      when: (answers) => { return orgs.length },
+      when: (answers) => { return orgs.length; },
       type    : 'confirm',
-      name    : 'isOrg',
+      name    : 'use',
       message : 'Will this repository be part of an organization you belong to?',
       store   : true
     },
     {
-      when: (answers) => { return answers.isOrg; },
+      when: (answers) => { return answers.use; },
       type: 'list',
       name: 'org',
       message: 'Select your organization',

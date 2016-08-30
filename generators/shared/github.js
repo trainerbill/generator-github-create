@@ -127,8 +127,8 @@ function checkRepo() {
   return new Promise((resolve, reject) => {
     let repository = (0, _lodash.find)(generator.repos, { name: generator.config.get('repo').name });
     if (repository) {
-      console.log(_chalk2.default.bold.red('Repository already exists!'));
-      return reject('Repository already exists!');
+      console.log(repository);
+      return reject(repository.name + ' already exists!');
     }
     return resolve();
   });

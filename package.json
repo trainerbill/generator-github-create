@@ -7,7 +7,6 @@
   "files": [
     "generators/app",
     "generators/authenticate",
-    "generators/setup",
     "generators/create",
     "generators/orgs",
     "generators/git"

@@ -37,7 +37,7 @@ class GitCreateGenerator extends _yeomanGenerator.Base {
   }
 
   initializing() {
-    _logger2.default.debug("Create::Initializing::Start");
+    _logger2.default.debug('Create::Initializing::Start');
     this.tempConfig = {};
     //Authenticate Github API
     if (!github.get()) {
@@ -47,29 +47,31 @@ class GitCreateGenerator extends _yeomanGenerator.Base {
     if (!this.config.get('orgs')) {
       this.config.set('orgs', {});
     }
+    _logger2.default.debug('Create::Initializing::End');
   }
 
   prompting() {
-    _logger2.default.debug("Create::Prompting::Start");
+    _logger2.default.debug('Create::Prompting::Start');
     return github.getRepos(this.config.get('authenticate'), this.config.get('orgs')).then(repos => this.prompt(prompts.repository(repos))).then(answers => {
       this.tempConfig = (0, _lodash2.default)(this.tempConfig, answers);
     }).then(() => {
       this.config.set('create', this.tempConfig);
-      _logger2.default.debug("Create::Prompting::End", this.config.get('create'));
+      _logger2.default.debug('Create::Prompting::End', this.config.get('create'));
     });
   }
 
   configuring() {
-    _logger2.default.debug("Create::Configuring::Start");
+    _logger2.default.debug('Create::Configuring::Start');
     this.config.save();
+    _logger2.default.debug('Create::Configuring::End');
   }
 
   install() {
-    _logger2.default.debug("Create::Install::Start");
+    _logger2.default.debug('Create::Install::Start');
     return github.createRepository(this.config.get('create'), this.config.get('orgs')).then(repo => {
       this.config.set((0, _lodash2.default)(this.config.get('create'), { repository: { http_url: repo.html_url, ssh_url: repo.ssh_url } }));
       this.config.save();
-      _logger2.default.debug("Create::Install::End");
+      _logger2.default.debug('Create::Install::End');
     });
   }
 

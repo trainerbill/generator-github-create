@@ -8,9 +8,12 @@ exports.git = git;
 var _shell = require('../shared/shell');
 
 function git(config) {
-  let choices = Object.keys(config.repository).map(function (item) {
-    return config.repository[item];
-  });
+  let choices = [];;
+  if (config.repository) {
+    choices = Object.keys(config.repository).map(item => {
+      return config.repository[item];
+    });
+  }
 
   return [{
     name: 'remote',
@@ -27,7 +30,7 @@ function git(config) {
     },
     name: 'url',
     message: 'Remote Url',
-    default: config.url
+    default: config.url || ''
   }, {
     when: answers => {
       return choices.length > 0;
@@ -36,7 +39,7 @@ function git(config) {
     name: 'url',
     choices: choices,
     message: 'Remote Url',
-    default: config.url
+    default: config.url || ''
   }, {
     type: 'confirm',
     name: 'pull',

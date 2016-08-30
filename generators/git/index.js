@@ -39,29 +39,34 @@ class GithubGitGenerator extends _yeomanGenerator.Base {
   }
 
   initializing() {
-    _logger2.default.debug("Git::Initializing::Start");
+    _logger2.default.debug('Git::Initializing::Start');
     this.config.set('git', {
       init: true,
-      remote: true,
       url: this.options.remoteUrl || this.config.get(),
       repository: this.config.get('repository')
     });
+    _logger2.default.debug('Git::Initializing::End');
   }
 
   prompting() {
-    _logger2.default.debug("Git::Prompting::Start");
+    _logger2.default.debug('Git::Prompting::Start');
     return this.prompt(prompts.git(this.config.get('git'))).then(answers => {
       this.config.set('git', (0, _lodash2.default)(this.config.get('git'), answers));
+      _logger2.default.debug('Git::Prompting::End');
     });
   }
 
   configuring() {
-    _logger2.default.debug("Git::Configuring::Start");
+    _logger2.default.debug('Git::Configuring::Start');
     this.config.save();
+    _logger2.default.debug('Git::Configuring::End');
   }
 
   install() {
-    return shell.gitInit(this.config.get('git')).then(() => shell.gitRemote(this.config.get('git'))).then(() => shell.gitPull(this.config.get('git'))).then(() => shell.gitPull(this.config.get('git')));
+    _logger2.default.debug('Git::Install::Start');
+    return shell.gitInit(this.config.get('git')).then(() => shell.gitRemote(this.config.get('git'))).then(() => shell.gitPull(this.config.get('git'))).then(() => shell.gitPull(this.config.get('git'))).then(() => {
+      _logger2.default.debug('Git::Install::End');
+    });
   }
 
 }

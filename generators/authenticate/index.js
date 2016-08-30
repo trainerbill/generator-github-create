@@ -60,7 +60,7 @@ class GithubAuthenticateGenerator extends _yeomanGenerator.Base {
   }
 
   initializing() {
-    _logger2.default.debug("Authenticate::Initializing::Start");
+    _logger2.default.debug('Authenticate::Initializing::Start');
     //Initialize Github API
     github.get() || github.init(this.options.GitHubAPI);
 
@@ -77,8 +77,12 @@ class GithubAuthenticateGenerator extends _yeomanGenerator.Base {
       }
     }).then(() => github.authenticate(this.config.get('authenticate').username, this.password)).then(() => github.getAuthorization(this.options.appName)).then(authorization => github.deleteAuthorization(authorization)).then(() => github.createAuthorization(this.options.appName, this.options.appUrl)).then(() => {
       this.config.save();
-      _logger2.default.debug("Authenticate::Initializing::End");
+      _logger2.default.debug('Authenticate::Initializing::End');
     });
+  }
+
+  install() {
+    _logger2.default.debug('Authenticate::Install::Start');
   }
 
 }

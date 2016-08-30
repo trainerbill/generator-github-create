@@ -24,9 +24,6 @@ export function saveUsername(username) {
 };
 
 export function gitInit(config) {
-  if (!config.init) {
-    return true;
-  }
   return new Promise((resolve, reject) => {
     if (shell.which('git')) {
       shell.exec('git init', { silent: true }, (code, stdout, stderr) => {
@@ -60,24 +57,6 @@ export function gitRemotes() {
     }
   });
 };
-
-export function checkRemote(name) {
-  return new Promise((resolve, reject) => {
-    gitRemotes()
-      .then(remotes => {
-        //console.log(remotes);
-        let regex = new RegExp('^' + name + '\t');
-        remotes.forEach(remote => {
-          if(regex.test(remote)) {
-            console.log('Exists!!!!');
-            resolve('Remote name already exists');
-          }
-        });
-        resolve(true)
-      });
-  });
-}
-
 
 export function gitPull(config) {
   if (!config.pull) {

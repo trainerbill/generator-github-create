@@ -8,39 +8,28 @@ class GithubOrgsGenerator extends Base {
 
   constructor(...args) {
     super(...args);
-    /*
-    //Options
-    this.option('GitHubAPI', {
-      required: false,
-      defaults: {},
-      desc: 'GitHubAPI Configuration'
-    });
-    */
-
-
-
   }
 
   initializing() {
-    logger.debug("Orgs::Initializing::Start");
+    logger.debug('Orgs::Initializing::Start');
     //Authenticate Github API
     if (!github.get()) {
       this.composeWith('@modern-mean/git:authenticate');
     }
+    logger.debug('Orgs::Initializing::End');
   }
 
   prompting() {
-    logger.debug("Orgs::Prompting::Start");
+    logger.debug('Orgs::Prompting::Start');
     return github.getOrgs()
       .then(orgs => {
         this.orgs = orgs;
         return this.prompt(prompts.orgs(orgs));
       })
       .then(answers => {
-        //TODO .login is causing issues when answer is no on prompt
-        this.config.set('orgs', { org: this.orgs[answers.org].login });
-        logger.debug("Orgs::Prompting::End");
+        this.config.set('orgs', answers);
         this.config.save();
+        logger.debug('Orgs::Prompting::End');
       });
   }
 

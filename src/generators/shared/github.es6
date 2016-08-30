@@ -105,8 +105,8 @@ export function checkRepo() {
   return new Promise((resolve, reject) => {
     let repository = find(generator.repos, { name: generator.config.get('repo').name });
     if (repository) {
-      console.log(chalk.bold.red('Repository already exists!'));
-      return reject('Repository already exists!');
+      console.log(repository);
+      return reject(repository.name + ' already exists!');
     }
     return resolve();
   });

@@ -6,19 +6,19 @@ Object.defineProperty(exports, "__esModule", {
 exports.orgs = orgs;
 function orgs(orgs) {
   let choices = orgs.map(function (item) {
-    return { name: item['login'], value: orgs.indexOf(item) };
+    return item.login;
   });
   return [{
     when: answers => {
       return orgs.length;
     },
     type: 'confirm',
-    name: 'isOrg',
+    name: 'use',
     message: 'Will this repository be part of an organization you belong to?',
     store: true
   }, {
     when: answers => {
-      return answers.isOrg;
+      return answers.use;
     },
     type: 'list',
     name: 'org',
