@@ -1,6 +1,6 @@
 {
   "name": "generator-github-create",
-  "version": "0.0.9",
+  "version": "0.1.0",
   "description": "Create a github repository.",
   "keywords": [
     "yeoman-generator",
