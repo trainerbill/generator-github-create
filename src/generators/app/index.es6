@@ -8,32 +8,38 @@ class GitGenerator extends Base {
   }
 
   initializing() {
-    this.log(yosay("Welcome to the github repository generator!"));
+    this.log(yosay('Welcome to the github repository generator!'));
     this.composeWith('github-create:authenticate');
     this.composeWith('github-create:orgs');
+
   }
 
   default() {
-    this.composeWith('github-create:create');
+    this.composeWith('github-create:create', {
+      options: {
+        org: this.config.get('orgs').org || undefined,
+        user: this.config.get('authenticate').user
+      }
+    });
+  }
+
+  writing() {
+    this.composeWith('github-create:readme', {
+      options: {
+        profile: this.config.get('create').org || this.config.get('authenticate').user,
+        repository: this.config.get('create').name,
+        title: this.config.get('create').name,
+        description: this.config.get('create').description
+      }
+    });
   }
 
   install() {
-    console.log(this.config.get('create').urls);
     this.composeWith('github-create:gitinit', {
       args: this.config.get('create').urls
     });
-    this.composeWith('badges', {
-      options: {
-        'skip-install': this.options['skip-install'],
-        user: this.config.get('orgs').org || this.config.get('authenticate').username,
-        project: this.config.get('create').name,
-        badges: ['travis', 'npm', 'coveralls', 'dependencies', 'devDependencies'],
-        nosay: true
-      }
-    },
-    {
-      local: require.resolve('generator-badges')
-    });
+
+
     this.composeWith('github-create:gitpush');
   }
 

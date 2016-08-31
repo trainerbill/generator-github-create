@@ -67,7 +67,7 @@ export function checkRemote(name) {
             resolve('Remote name already exists');
           }
         });
-        resolve(true)
+        resolve(true);
       });
   });
 }

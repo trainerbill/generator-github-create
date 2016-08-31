@@ -120,7 +120,7 @@ class GithubAuthenticateGenerator extends Base {
         default: config.twofactor || false
       },
       {
-        when: (answers) => { return answers.twofactor },
+        when: (answers) => { return answers.twofactor; },
         name    : 'twofactorcode',
         message : 'Two Factor Code'
       }

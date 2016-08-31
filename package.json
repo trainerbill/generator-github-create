@@ -7,10 +7,14 @@
     "scaffold",
     "github",
     "repository",
+    "create",
+    "create repository",
     "organization",
     "git",
     "authentication",
-    "authenticate"
+    "authenticate",
+    "badge",
+    "badges"
   ],
   "main": "generators/app/index.js",
   "files": [
@@ -19,7 +23,8 @@
     "generators/create",
     "generators/orgs",
     "generators/gitinit",
-    "generators/gitpush"
+    "generators/gitpush",
+    "generators/readme"
   ],
   "engines": {
     "node": ">=6.4",
@@ -45,7 +50,6 @@
   },
   "homepage": "https://github.com/trainerbill/generator-github-create#readme",
   "dependencies": {
-    "generator-badges": "0.0.9",
     "github": "^2.5.2",
     "lodash.find": "^4.6.0",
     "lodash.merge": "^4.6.0",

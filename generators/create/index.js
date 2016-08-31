@@ -110,9 +110,8 @@ class GitCreateGenerator extends _yeomanGenerator.Base {
     if (config['skip-prompt']) {
       return true;
     }
-    let prompts;
     return github.getRepos(config).then(repos => {
-      prompts = [{
+      return [{
         name: 'name',
         message: 'Repository Name',
         validate: input => {
@@ -154,13 +153,10 @@ class GitCreateGenerator extends _yeomanGenerator.Base {
           value: 'apache'
         }]
       }];
-    }).then(() => this.prompt(prompts)).then(answers => {
+    }).then(prompts => this.prompt(prompts)).then(answers => {
       this.config.set('create', (0, _lodash2.default)(this.config.get('create'), answers));
+      this.config.save();
     });
-  }
-
-  configuring() {
-    this.config.save();
   }
 
   default() {

@@ -60,7 +60,7 @@ export function createAuthorization (config, twofactorcode) {
     if (twofactorcode) {
       setup.headers = {
         'X-GitHub-OTP': config.twofactorcode
-      }
+      };
     }
 
     github.authorization.create(setup, (err, res) => {

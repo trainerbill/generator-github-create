@@ -95,10 +95,9 @@ class GitCreateGenerator extends Base {
     if (config['skip-prompt']) {
       return true;
     }
-    let prompts;
     return github.getRepos(config)
       .then(repos => {
-        prompts = [
+        return [
           {
             name: 'name',
             message: 'Repository Name',
@@ -149,14 +148,11 @@ class GitCreateGenerator extends Base {
           }
         ];
       })
-      .then(() => this.prompt(prompts))
+      .then(prompts => this.prompt(prompts))
       .then(answers => {
         this.config.set('create', merge(this.config.get('create'), answers));
+        this.config.save();
       });
-  }
-
-  configuring() {
-    this.config.save();
   }
 
   default() {
