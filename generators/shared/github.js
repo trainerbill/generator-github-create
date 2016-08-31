@@ -47,13 +47,13 @@ function authenticate(user, pass) {
   });
 }
 
-function getAuthorization(appName) {
+function getAuthorization(config) {
   return new Promise((resolve, reject) => {
     github.authorization.getAll({ page: '1', per_page: '100' }, (err, auths) => {
       if (err) {
         return reject(err);
       }
-      let authorization = (0, _lodash.find)(auths, { app: { name: appName } }) || undefined;
+      let authorization = (0, _lodash.find)(auths, { app: { name: config.appName } }) || undefined;
       return resolve(authorization);
     });
   });
@@ -73,16 +73,21 @@ function deleteAuthorization(authorization) {
   });
 }
 
-function createAuthorization(appName, appUrl) {
+function createAuthorization(config, twofactorcode) {
   return new Promise((resolve, reject) => {
-    github.authorization.create({
-      scopes: ['user', 'public_repo', 'repo', 'repo:status'],
-      note: appName,
-      note_url: appUrl,
-      headers: {
-        'X-GitHub-OTP': 'two-factor-code'
-      }
-    }, (err, res) => {
+    let setup = {
+      scopes: config.scopes,
+      note: config.appName,
+      note_url: config.appUrl
+    };
+
+    if (twofactorcode) {
+      setup.headers = {
+        'X-GitHub-OTP': config.twofactorcode
+      };
+    }
+
+    github.authorization.create(setup, (err, res) => {
       if (err) {
         return reject(err);
       }
@@ -103,17 +108,17 @@ function getOrgs() {
   });
 }
 
-function getRepos(authenticate, orgs) {
+function getRepos(config) {
   return new Promise((resolve, reject) => {
-    if (orgs.org) {
-      github.repos.getForOrg({ org: orgs.org, page: '1', per_page: '100' }, (err, res) => {
+    if (config.org) {
+      github.repos.getForOrg({ org: config.org, page: '1', per_page: '100' }, (err, res) => {
         if (err) {
           return reject(err);
         }
         return resolve(res);
       });
     } else {
-      github.repos.getForUser({ user: authenticate.username, page: '1', per_page: '100' }, (err, res) => {
+      github.repos.getForUser({ user: config.user, page: '1', per_page: '100' }, (err, res) => {
         if (err) {
           return reject(err);
         }
@@ -134,16 +139,16 @@ function checkRepo() {
   });
 }
 
-function createRepository(repository, orgs) {
+function createRepository(config) {
   return new Promise((resolve, reject) => {
-    if (orgs.org) {
+    if (config.org) {
       github.repos.createForOrg({
-        org: orgs.org,
-        name: repository.name,
-        description: repository.description,
-        private: repository.private,
-        license_template: repository.license,
-        auto_init: true
+        org: config.org,
+        name: config.name,
+        description: config.description,
+        private: config.private,
+        license_template: config.license,
+        auto_init: config.autoinit
       }, (err, res) => {
         if (err) {
           return reject(err);
@@ -152,11 +157,11 @@ function createRepository(repository, orgs) {
       });
     } else {
       github.repos.create({
-        name: repository.name,
-        description: repository.description,
-        private: repository.private,
-        license_template: repository.license,
-        auto_init: true
+        name: config.name,
+        description: config.description,
+        private: config.private,
+        license_template: config.license,
+        auto_init: config.autoinit
       }, (err, res) => {
         if (err) {
           return reject(err);

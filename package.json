@@ -18,7 +18,8 @@
     "generators/authenticate",
     "generators/create",
     "generators/orgs",
-    "generators/git"
+    "generators/gitinit",
+    "generators/gitpush"
   ],
   "engines": {
     "node": ">=6.4",
@@ -44,13 +45,16 @@
   },
   "homepage": "https://github.com/trainerbill/generator-github-create#readme",
   "dependencies": {
+    "generator-badges": "0.0.9",
     "github": "^2.5.2",
     "lodash.find": "^4.6.0",
     "lodash.merge": "^4.6.0",
     "shelljs": "^0.7.4",
     "winston": "^2.2.0",
-    "yeoman-generator": "^0.24.1"
+    "yeoman-generator": "^0.24.1",
+    "yosay": "^1.2.0"
   },
+  "peerDependencies": {},
   "devDependencies": {
     "@modern-mean/build-gulp": "~0.0.29"
   }

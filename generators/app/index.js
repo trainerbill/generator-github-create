@@ -2,13 +2,9 @@
 
 var _yeomanGenerator = require('yeoman-generator');
 
-var _chalk = require('chalk');
+var _yosay = require('yosay');
 
-var _chalk2 = _interopRequireDefault(_chalk);
-
-var _logger = require('../shared/logger');
-
-var _logger2 = _interopRequireDefault(_logger);
+var _yosay2 = _interopRequireDefault(_yosay);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -19,23 +15,32 @@ class GitGenerator extends _yeomanGenerator.Base {
   }
 
   initializing() {
-    _logger2.default.debug('App::initializing::Start');
-    //this.composeWith('github-create:authenticate', { options: { GitHubAPI: { debug: true } } });
+    this.log((0, _yosay2.default)("Welcome to the github repository generator!"));
     this.composeWith('github-create:authenticate');
     this.composeWith('github-create:orgs');
-    _logger2.default.debug('App::Initializing::End');
+  }
+
+  default() {
+    this.composeWith('github-create:create');
   }
 
   install() {
-    _logger2.default.debug('App::Install::Start');
-    this.composeWith('github-create:create');
-    _logger2.default.debug('App::Install::End');
-  }
-
-  end() {
-    _logger2.default.debug('App::End::Start');
-    this.composeWith('github-create:git');
-    _logger2.default.debug('App::End::End');
+    console.log(this.config.get('create').urls);
+    this.composeWith('github-create:gitinit', {
+      args: this.config.get('create').urls
+    });
+    this.composeWith('badges', {
+      options: {
+        'skip-install': this.options['skip-install'],
+        user: this.config.get('orgs').org || this.config.get('authenticate').username,
+        project: this.config.get('create').name,
+        badges: ['travis', 'npm', 'coveralls', 'dependencies', 'devDependencies'],
+        nosay: true
+      }
+    }, {
+      local: require.resolve('generator-badges')
+    });
+    this.composeWith('github-create:gitpush');
   }
 
 }

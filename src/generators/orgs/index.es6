@@ -1,35 +1,73 @@
 import { Base } from 'yeoman-generator';
-import chalk from 'chalk';
-import * as prompts from './prompts';
 import * as github from '../shared/github';
-import logger from '../shared/logger';
+import merge from 'lodash.merge';
+
 
 class GithubOrgsGenerator extends Base {
 
   constructor(...args) {
     super(...args);
+
+    //Options
+    this.option('skip-prompt', {
+      type: String,
+      alias: 's',
+      desc: 'Skip prompting.  You will either need to supply all arguments or the defaults will be used.',
+      defaults: false
+    });
+
+    this.option('org', {
+      type: String,
+      alias: 'o',
+      desc: 'Organization'
+    });
+
+    this.config.set('orgs', merge(this.config.get('orgs'), {
+      'skip-prompt': this.options['skip-prompt'],
+      org: this.options.org
+    }));
+
   }
 
   initializing() {
-    logger.debug('Orgs::Initializing::Start');
     //Authenticate Github API
     if (!github.get()) {
-      this.composeWith('@modern-mean/git:authenticate');
+      this.composeWith('github-create:authenticate');
     }
-    logger.debug('Orgs::Initializing::End');
   }
 
   prompting() {
-    logger.debug('Orgs::Prompting::Start');
+    let config = this.config.get('orgs');
+    if (config['skip-prompt']) {
+      return true;
+    }
+
     return github.getOrgs()
       .then(orgs => {
-        this.orgs = orgs;
-        return this.prompt(prompts.orgs(orgs));
+        let choices = orgs.map(function(item) { return item.login; });
+
+        return [
+          {
+            when: (answers) => { return orgs.length; },
+            type    : 'confirm',
+            name    : 'use',
+            message : 'Will this repository be part of an organization you belong to?',
+            default : config.use
+          },
+          {
+            when: (answers) => { return answers.use; },
+            type: 'list',
+            name: 'org',
+            default: config.org || 0,
+            message: 'Select your organization',
+            choices: choices
+          }
+        ];
       })
+      .then(prompts => this.prompt(prompts))
       .then(answers => {
         this.config.set('orgs', answers);
         this.config.save();
-        logger.debug('Orgs::Prompting::End');
       });
   }
 

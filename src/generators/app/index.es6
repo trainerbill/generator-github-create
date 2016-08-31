@@ -1,6 +1,5 @@
 import { Base } from 'yeoman-generator';
-import chalk from 'chalk';
-import logger from '../shared/logger';
+import yosay from 'yosay';
 
 class GitGenerator extends Base {
 
@@ -9,23 +8,33 @@ class GitGenerator extends Base {
   }
 
   initializing() {
-    logger.debug('App::initializing::Start');
-    //this.composeWith('github-create:authenticate', { options: { GitHubAPI: { debug: true } } });
+    this.log(yosay("Welcome to the github repository generator!"));
     this.composeWith('github-create:authenticate');
     this.composeWith('github-create:orgs');
-    logger.debug('App::Initializing::End');
+  }
+
+  default() {
+    this.composeWith('github-create:create');
   }
 
   install() {
-    logger.debug('App::Install::Start');
-    this.composeWith('github-create:create');
-    logger.debug('App::Install::End');
-  }
-
-  end() {
-    logger.debug('App::End::Start');
-    this.composeWith('github-create:git');
-    logger.debug('App::End::End');
+    console.log(this.config.get('create').urls);
+    this.composeWith('github-create:gitinit', {
+      args: this.config.get('create').urls
+    });
+    this.composeWith('badges', {
+      options: {
+        'skip-install': this.options['skip-install'],
+        user: this.config.get('orgs').org || this.config.get('authenticate').username,
+        project: this.config.get('create').name,
+        badges: ['travis', 'npm', 'coveralls', 'dependencies', 'devDependencies'],
+        nosay: true
+      }
+    },
+    {
+      local: require.resolve('generator-badges')
+    });
+    this.composeWith('github-create:gitpush');
   }
 
 }
