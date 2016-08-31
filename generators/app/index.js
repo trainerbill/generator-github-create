@@ -15,7 +15,7 @@ class GitGenerator extends _yeomanGenerator.Base {
   }
 
   initializing() {
-    this.log((0, _yosay2.default)("Welcome to the github repository generator!"));
+    this.log((0, _yosay2.default)('Welcome to the github repository generator!'));
     this.composeWith('github-create:authenticate');
     this.composeWith('github-create:orgs');
   }

@@ -22,30 +22,30 @@ class GithubGitPushGenerator extends _yeomanGenerator.Base {
     //Options
     this.option('skip-prompt', {
       type: String,
-      alias: "s",
-      desc: "Skip prompting.  You will either need to supply all arguments/options or the defaults will be used.",
+      alias: 's',
+      desc: 'Skip prompting.  You will either need to supply all arguments/options or the defaults will be used.',
       defaults: false
     });
 
     this.option('name', {
       type: String,
-      alias: "n",
-      desc: "Remote Name",
+      alias: 'n',
+      desc: 'Remote Name',
       defaults: 'origin'
     });
 
     this.option('branch', {
       type: String,
-      alias: "b",
-      desc: "Remote Branch",
+      alias: 'b',
+      desc: 'Remote Branch',
       defaults: 'master'
     });
 
     this.option('message', {
       type: String,
-      alias: "m",
-      desc: "Git commit message",
-      defaults: "Initial Commit"
+      alias: 'm',
+      desc: 'Git commit message',
+      defaults: 'Initial Commit'
     });
 
     this.config.set('gitpush', (0, _lodash2.default)(this.config.get('gitpush'), {
