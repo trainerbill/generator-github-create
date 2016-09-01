@@ -37,6 +37,8 @@ class GithubOrgsGenerator extends _yeomanGenerator.Base {
       'skip-prompt': this.options['skip-prompt'],
       org: this.options.org
     }));
+
+    this.config.save();
   }
 
   initializing() {

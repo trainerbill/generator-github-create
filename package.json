@@ -60,6 +60,8 @@
   },
   "peerDependencies": {},
   "devDependencies": {
-    "@modern-mean/build-gulp": "~0.0.29"
+    "@modern-mean/build-gulp": "~0.0.29",
+    "yeoman-assert": "^2.2.1",
+    "yeoman-test": "^1.4.0"
   }
 }

@@ -27,6 +27,7 @@ class GithubOrgsGenerator extends Base {
       org: this.options.org
     }));
 
+    this.config.save();
   }
 
   initializing() {

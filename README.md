@@ -23,12 +23,12 @@ npm install -g generator-github-create
 You can use the following methods to composeWith
 
 #Sub Generators
-* github-create:authentication - Authenticate to github
-* github-create:orgs - List the users orgs and let them choose
-* github-create:create - Create the github repository
-* github-create:gitinit - Initialize local git, add remote, pull
-* github-create:gitpush - Commit and push generated project
-* github-create:readme - create readme / add badges
+* yo github-create:authentication - Authenticate to github
+* yo github-create:orgs - List the users orgs and let them choose
+* yo github-create:create - Create the github repository
+* yo github-create:gitinit - Initialize local git, add remote, pull
+* yo github-create:gitpush - Commit and push generated project
+* yo github-create:readme - create readme / add badges
 
 #Usage
 To find usage you can run --help on the subgenerators

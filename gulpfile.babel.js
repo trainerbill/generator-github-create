@@ -23,7 +23,7 @@ build.displayName = 'build';
 gulp.task(build);
 
 //gulp test
-let test = gulp.series(builder.lint.all);
+let test = gulp.series(builder.lint.all, builder.test.src);
 test.displayName = 'test';
 gulp.task(test);
 

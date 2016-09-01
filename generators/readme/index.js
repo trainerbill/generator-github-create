@@ -59,7 +59,7 @@ class GithubReadmeGenerator extends _yeomanGenerator.Base {
       defaults: false
     });
 
-    this.config.set('badges', (0, _lodash2.default)(this.config.get('badges'), {
+    this.config.set('readme', (0, _lodash2.default)(this.config.get('readme'), {
       'skip-prompt': this.options['skip-prompt'],
       badges: this.options.badges.split(','),
       profile: this.options.profile,
@@ -67,6 +67,8 @@ class GithubReadmeGenerator extends _yeomanGenerator.Base {
       title: this.options.title,
       description: this.options.description
     }));
+
+    this.config.save();
   }
 
   initializing() {
@@ -74,7 +76,7 @@ class GithubReadmeGenerator extends _yeomanGenerator.Base {
   }
 
   prompting() {
-    let config = this.config.get('badges');
+    let config = this.config.get('readme');
     if (config['skip-prompt']) {
       return true;
     }
@@ -118,16 +120,13 @@ class GithubReadmeGenerator extends _yeomanGenerator.Base {
     }];
 
     return this.prompt(prompts).then(answers => {
-      this.config.set('badges', answers);
+      this.config.set('readme', (0, _lodash2.default)(this.config.get('readme'), answers));
       this.config.save();
     });
   }
 
   writing() {
-    let config = this.config.get('badges');
-    if (config.badges.length < 1) {
-      return true;
-    }
+    let config = this.config.get('readme');
 
     this.fs.copyTpl(this.templatePath('README.md'), this.destinationPath('README.md'), {
       profile: config.profile,
