@@ -13,14 +13,7 @@ env:
 #services:
   #- mongodb
 # gcc 4.8 requires ubuntu-toolchain-r-test
-addons:
-  apt:
-    sources:
-    - ubuntu-toolchain-r-test
-    packages:
-    - g++-4.8
-    - gcc-4.8
-    - clang
+
 before_install:
   - npm i nsp -g
   - npm install gulpjs/gulp-cli -g
