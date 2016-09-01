@@ -101,6 +101,8 @@ class GithubAuthenticateGenerator extends _yeomanGenerator.Base {
       appName: this.options.appName,
       appUrl: this.options.appUrl
     }));
+
+    this.config.save();
   }
 
   initializing() {
@@ -117,7 +119,7 @@ class GithubAuthenticateGenerator extends _yeomanGenerator.Base {
         return answers.username !== config.username;
       },
       type: 'confirm',
-      name: 'save',
+      name: 'saveuser',
       message: 'Save username to git config?  Will make generation faster next time',
       default: 'Y'
     }, {
@@ -143,7 +145,8 @@ class GithubAuthenticateGenerator extends _yeomanGenerator.Base {
       delete answers.password;
       delete answers.twofactorcode;
       this.config.set('authenticate', (0, _lodash2.default)(this.config.get('authenticate'), answers));
-      if (answers.save) {
+
+      if (answers.saveuser) {
         shell.saveUsername(answers.username);
       }
     }).then(() => github.authenticate(config.username, this.password)).then(() => github.getAuthorization(config, this.twofactorcode)).then(authorization => github.deleteAuthorization(authorization)).then(() => github.createAuthorization(config)).then(() => {

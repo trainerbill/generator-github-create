@@ -87,13 +87,14 @@ class GithubAuthenticateGenerator extends Base {
       appUrl: this.options.appUrl
     }));
 
+    this.config.save();
+
   }
 
   initializing() {
     let config = this.config.get('authenticate');
     //Initialize Github API
     github.get() || github.init(config.github);
-
 
     let prompts = [
       {
@@ -104,7 +105,7 @@ class GithubAuthenticateGenerator extends Base {
       {
         when: (answers) => { return answers.username !== config.username; },
         type: 'confirm',
-        name: 'save',
+        name: 'saveuser',
         message: 'Save username to git config?  Will make generation faster next time',
         default: 'Y'
       },
@@ -133,7 +134,8 @@ class GithubAuthenticateGenerator extends Base {
         delete answers.password;
         delete answers.twofactorcode;
         this.config.set('authenticate', merge(this.config.get('authenticate'), answers));
-        if(answers.save) {
+
+        if(answers.saveuser) {
           shell.saveUsername(answers.username);
         }
       })

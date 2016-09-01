@@ -66,3 +66,37 @@ export let orgs = {
     }
   }
 };
+
+export let authenticate = {
+  src: '../src/generators/authenticate',
+  prompts: {
+    username: 'testuser',
+    saveuser: true,
+    password: 'testpassword',
+    twofactor: true,
+    twofactorcode: 'asdf'
+  },
+  options: {
+    debug: false
+  },
+  save: {
+    'generator-github-create': {
+      'authenticate': {
+        'github': {
+          'debug': false,
+          'host': 'api.github.com',
+          'protocol': 'https',
+          'pathPrefix': '',
+          'headers': {
+            'user-agent': 'generator-github-create'
+          },
+          'scopes': 'user,public_repo,repo,repo:status'
+        },
+        'username': 'testuser',
+        'appName': 'generator-github-create',
+        'appUrl': 'https://github.com/trainerbill/generator-github-create',
+        'twofactor': true
+      }
+    }
+  }
+};
