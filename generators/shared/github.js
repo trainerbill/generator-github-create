@@ -4,6 +4,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.init = init;
+exports.destroy = destroy;
 exports.get = get;
 exports.authenticate = authenticate;
 exports.getAuthorization = getAuthorization;
@@ -11,7 +12,6 @@ exports.deleteAuthorization = deleteAuthorization;
 exports.createAuthorization = createAuthorization;
 exports.getOrgs = getOrgs;
 exports.getRepos = getRepos;
-exports.checkRepo = checkRepo;
 exports.createRepository = createRepository;
 
 var _lodash = require('lodash');
@@ -30,6 +30,10 @@ let github;
 
 function init(config) {
   return github = new _github2.default(config);
+}
+
+function destroy() {
+  return github = undefined;
 }
 
 function get() {
@@ -83,7 +87,7 @@ function createAuthorization(config, twofactorcode) {
 
     if (twofactorcode) {
       setup.headers = {
-        'X-GitHub-OTP': config.twofactorcode
+        'X-GitHub-OTP': twofactorcode
       };
     }
 
@@ -125,17 +129,6 @@ function getRepos(config) {
         return resolve(res);
       });
     }
-  });
-}
-
-function checkRepo() {
-  return new Promise((resolve, reject) => {
-    let repository = (0, _lodash.find)(generator.repos, { name: generator.config.get('repo').name });
-    if (repository) {
-      console.log(repository);
-      return reject(repository.name + ' already exists!');
-    }
-    return resolve();
   });
 }
 

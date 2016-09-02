@@ -8,6 +8,10 @@ export function init(config) {
   return github = new GitHubApi(config);
 }
 
+export function destroy() {
+  return github = undefined;
+}
+
 export function get() {
   return github;
 }
@@ -59,7 +63,7 @@ export function createAuthorization (config, twofactorcode) {
 
     if (twofactorcode) {
       setup.headers = {
-        'X-GitHub-OTP': config.twofactorcode
+        'X-GitHub-OTP': twofactorcode
       };
     }
 
@@ -101,17 +105,6 @@ export function getRepos(config) {
         return resolve(res);
       });
     }
-  });
-}
-
-export function checkRepo() {
-  return new Promise((resolve, reject) => {
-    let repository = find(generator.repos, { name: generator.config.get('repo').name });
-    if (repository) {
-      console.log(repository);
-      return reject(repository.name + ' already exists!');
-    }
-    return resolve();
   });
 }
 
