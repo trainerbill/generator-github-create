@@ -25,7 +25,7 @@ class GitCreateGenerator extends Base {
 
     this.option('user', {
       type: String,
-      alias: 'o',
+      alias: 'u',
       desc: 'Github Username. Creates the repository on the user',
       defaults: false
     });
@@ -78,23 +78,20 @@ class GitCreateGenerator extends Base {
   }
 
   initializing() {
-
     //Authenticate Github API
+      /* istanbul ignore if */
     if (!github.get()) {
       this.composeWith('github-create:authenticate');
     }
-
-    let config = this.config.get('create');
-
-
-
   }
 
   prompting() {
     let config = this.config.get('create');
+
     if (config['skip-prompt']) {
       return true;
     }
+    
     return github.getRepos(config)
       .then(repos => {
         return [
@@ -126,7 +123,6 @@ class GitCreateGenerator extends Base {
             ]
           },
           {
-            when: (answers) => { return config.autoinit; },
             type: 'list',
             name: 'license',
             message: 'License',
@@ -150,6 +146,12 @@ class GitCreateGenerator extends Base {
       })
       .then(prompts => this.prompt(prompts))
       .then(answers => {
+        //Hack to save user from authenticate config
+        /* istanbul ignore if */
+        if (!config.user) {
+          answers.user = this.config.get('authenticate').username || undefined;
+        }
+
         this.config.set('create', merge(this.config.get('create'), answers));
         this.config.save();
       });

@@ -100,3 +100,41 @@ export let authenticate = {
     }
   }
 };
+
+export let create = {
+  src: '../src/generators/create',
+  deps: [
+    [helpers.createDummyGenerator(), 'github-create:authenticate']
+  ],
+  prompts: {
+    name: 'testrepository',
+    description: 'Test Description',
+    private: false,
+    licensce: 'isc'
+  },
+  options: {
+    debug: false,
+    user: 'testuser',
+    name: 'testrepository',
+    description: 'Test Description',
+    private: false,
+    licensce: 'isc'
+  },
+  save: {
+    'generator-github-create': {
+      'create': {
+        'autoinit': false,
+        'name': 'testrepository',
+        'description': 'Test Description',
+        'private': false,
+        'license': 'isc',
+        'org': false,
+        'user': 'testuser',
+        'urls': [
+          'https://test',
+          'git@test'
+        ]
+      }
+    }
+  }
+};

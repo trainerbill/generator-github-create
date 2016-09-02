@@ -32,6 +32,7 @@ class GithubOrgsGenerator extends Base {
 
   initializing() {
     //Authenticate Github API
+    /* istanbul ignore if */
     if (!github.get()) {
       this.composeWith('github-create:authenticate');
     }

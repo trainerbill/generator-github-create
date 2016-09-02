@@ -43,6 +43,7 @@ class GithubOrgsGenerator extends _yeomanGenerator.Base {
 
   initializing() {
     //Authenticate Github API
+    /* istanbul ignore if */
     if (!github.get()) {
       this.composeWith('github-create:authenticate');
     }
