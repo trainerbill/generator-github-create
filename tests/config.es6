@@ -159,3 +159,28 @@ export let gitinit = {
     }
   }
 };
+
+export let gitpush = {
+  src: '../src/generators/gitpush',
+  prompts: {
+    'skip-prompt': false,
+    name: 'testorigin',
+    message: 'Test Message',
+    branch: 'branchy'
+  },
+  options: {
+    'skip-prompt': false,
+    name: 'testorigin',
+    message: 'Test Message',
+    branch: 'branchy'
+  },
+  save: {
+    'generator-github-create': {
+      'gitpush': {
+        'message': 'Test Message',
+        'name': 'testorigin',
+        'branch': 'branchy'
+      }
+    }
+  }
+};
