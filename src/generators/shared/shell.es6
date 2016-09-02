@@ -23,10 +23,10 @@ export function saveUsername(username) {
   }
 }
 
-export function gitInit(config) {
+export function gitInit() {
   return new Promise((resolve, reject) => {
     if (shell.which('git')) {
-      shell.exec('git init', (code, stdout, stderr) => {
+      shell.exec('git init', { silent: true }, (code, stdout, stderr) => {
         return resolve();
       });
     }
@@ -36,7 +36,7 @@ export function gitInit(config) {
 export function gitRemote(config) {
   return new Promise((resolve, reject) => {
     if (shell.which('git')) {
-      shell.exec('git remote add ' + config.name + ' ' + config.url, (code, stdout, stderr) => {
+      shell.exec('git remote add ' + config.name + ' ' + config.url, { silent: true }, (code, stdout, stderr) => {
         resolve();
       });
     }
@@ -48,7 +48,6 @@ export function gitRemotes() {
     if (shell.which('git')) {
       shell.exec('git remote -v', { silent: true }, (code, stdout, stderr) => {
         let remotes = stdout.split('\n');
-
         resolve(remotes);
       });
     }

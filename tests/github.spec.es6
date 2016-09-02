@@ -4,7 +4,7 @@ import GitHubApi from 'github';
 
 let sandbox;
 
-describe('generator-github-create:orgs', () => {
+describe('shared/github.es6', () => {
 
   beforeEach(() => {
     githubModule.init();

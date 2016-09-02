@@ -43,10 +43,10 @@ function saveUsername(username) {
   }
 }
 
-function gitInit(config) {
+function gitInit() {
   return new Promise((resolve, reject) => {
     if (_shelljs2.default.which('git')) {
-      _shelljs2.default.exec('git init', (code, stdout, stderr) => {
+      _shelljs2.default.exec('git init', { silent: true }, (code, stdout, stderr) => {
         return resolve();
       });
     }
@@ -56,7 +56,7 @@ function gitInit(config) {
 function gitRemote(config) {
   return new Promise((resolve, reject) => {
     if (_shelljs2.default.which('git')) {
-      _shelljs2.default.exec('git remote add ' + config.name + ' ' + config.url, (code, stdout, stderr) => {
+      _shelljs2.default.exec('git remote add ' + config.name + ' ' + config.url, { silent: true }, (code, stdout, stderr) => {
         resolve();
       });
     }
@@ -68,7 +68,6 @@ function gitRemotes() {
     if (_shelljs2.default.which('git')) {
       _shelljs2.default.exec('git remote -v', { silent: true }, (code, stdout, stderr) => {
         let remotes = stdout.split('\n');
-
         resolve(remotes);
       });
     }
