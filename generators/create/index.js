@@ -93,6 +93,8 @@ class GitCreateGenerator extends _yeomanGenerator.Base {
       org: this.options.org,
       user: this.options.user
     }));
+
+    this.config.save();
   }
 
   initializing() {

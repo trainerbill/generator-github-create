@@ -34,11 +34,15 @@ class GithubGitInitGenerator extends Base {
       name: this.options.name
     }));
 
+    this.config.save();
+
   }
 
   prompting() {
     let config = this.config.get('gitinit');
+
     if (config['skip-prompt']) {
+      this.config.set('gitinit', merge(this.config.get('gitinit'), { url: this.urls[0] }));
       return true;
     }
 
@@ -53,7 +57,7 @@ class GithubGitInitGenerator extends Base {
         when    : (answers) => { return this.urls.length <= 1; },
         name    : 'url',
         message : 'Remote Url',
-        default : config.url
+        default : this.urls[0] || config.url
       },
       {
         when    : (answers) => { return this.urls.length > 1; },

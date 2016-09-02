@@ -75,6 +75,8 @@ class GitCreateGenerator extends Base {
       org: this.options.org,
       user: this.options.user
     }));
+
+    this.config.save();
   }
 
   initializing() {
@@ -91,7 +93,7 @@ class GitCreateGenerator extends Base {
     if (config['skip-prompt']) {
       return true;
     }
-    
+
     return github.getRepos(config)
       .then(repos => {
         return [

@@ -138,3 +138,24 @@ export let create = {
     }
   }
 };
+
+export let gitinit = {
+  src: '../src/generators/gitinit',
+  prompts: {
+    'skip-prompt': false,
+    name: 'origin',
+    url: 'testurl'
+  },
+  options: {
+    'skip-prompt': false,
+    name: 'origin'
+  },
+  save: {
+    'generator-github-create': {
+      'gitinit': {
+        'name': 'origin',
+        'url': 'testurl'
+      }
+    }
+  }
+};

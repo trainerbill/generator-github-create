@@ -45,11 +45,15 @@ class GithubGitInitGenerator extends _yeomanGenerator.Base {
       'skip-prompt': this.options['skip-prompt'],
       name: this.options.name
     }));
+
+    this.config.save();
   }
 
   prompting() {
     let config = this.config.get('gitinit');
+
     if (config['skip-prompt']) {
+      this.config.set('gitinit', (0, _lodash2.default)(this.config.get('gitinit'), { url: this.urls[0] }));
       return true;
     }
 
@@ -68,7 +72,7 @@ class GithubGitInitGenerator extends _yeomanGenerator.Base {
       },
       name: 'url',
       message: 'Remote Url',
-      default: config.url
+      default: this.urls[0] || config.url
     }, {
       when: answers => {
         return this.urls.length > 1;
