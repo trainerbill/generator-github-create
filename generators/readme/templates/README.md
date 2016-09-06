@@ -2,3 +2,8 @@
 
 #<%= title %>
 <%= description %>
+
+#Installation
+```sh
+$ npm install --save <%= repository %>
+```
