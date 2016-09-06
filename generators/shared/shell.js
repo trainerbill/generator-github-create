@@ -133,7 +133,6 @@ function checkRemote(name) {
       });
       return resolve(true);
     }).catch(err => {
-      console.log(JSON.stringify(err));
       if (err === 'fatal: Not a git repository (or any of the parent directories): .git\n') {
         return resolve(true);
       }
