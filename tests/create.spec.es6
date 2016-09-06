@@ -20,10 +20,12 @@ describe('generator-github-create:create', () => {
   describe('Default', () => {
 
     let getOrgsStub,
+      getReposStub,
       createRepositoryStub;
 
     beforeEach(() => {
-      getOrgsStub = sandbox.stub(github, 'getOrgs').resolves([{ name: 'repo1' }, { name: 'repo2' }]);
+      getOrgsStub = sandbox.stub(github, 'getOrgs').resolves([{ login: 'org1' }, { login: 'org2' }]);
+      getReposStub = sandbox.stub(github, 'getRepos').resolves([{ name: 'repo1' }, { name: 'repo2' }]);
       createRepositoryStub = sandbox.stub(github, 'createRepository').resolves({ html_url: 'https://test', ssh_url: 'git@test' });
       return helpers.run(path.join(__dirname, create.src))
         .withGenerators(create.deps)
