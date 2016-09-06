@@ -22,100 +22,160 @@ var _shelljs2 = _interopRequireDefault(_shelljs);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function getUsername() {
-  return _shelljs2.default.exec('git config --get user.githubuser', { silent: true }).stdout.trim();
+  return new Promise((resolve, reject) => {
+    if (!_shelljs2.default.which('git')) {
+      return reject('This script requires local git installed!');
+    }
+
+    _shelljs2.default.exec('git config --get user.githubuser', { silent: true }, (code, stdout, stderr) => {
+      if (code !== 0) {
+        return reject(stderr);
+      }
+      return resolve(stdout.trim());
+    });
+  });
 }
 
 function saveEmail(email) {
-  if (_shelljs2.default.which('git')) {
-    return _shelljs2.default.exec('git config --global user.email "' + email + '"', { silent: true });
-  }
+  return new Promise((resolve, reject) => {
+    if (!_shelljs2.default.which('git')) {
+      return reject('This script requires local git installed!');
+    }
+    _shelljs2.default.exec('git config --global user.email "' + email + '"', { silent: true }, (code, stdout, stderr) => {
+      if (code !== 0) {
+        return reject(stderr);
+      }
+      return resolve();
+    });
+  });
 }
 
 function saveName(name) {
-  if (_shelljs2.default.which('git')) {
-    return _shelljs2.default.exec('git config --global user.name "' + name + '"', { silent: true });
-  }
+  return new Promise((resolve, reject) => {
+    if (!_shelljs2.default.which('git')) {
+      return reject('This script requires local git installed!');
+    }
+    _shelljs2.default.exec('git config --global user.name "' + name + '"', { silent: true }, (code, stdout, stderr) => {
+      if (code !== 0) {
+        return reject(stderr);
+      }
+      return resolve();
+    });
+  });
 }
 
 function saveUsername(username) {
-  if (_shelljs2.default.which('git')) {
-    return _shelljs2.default.exec('git config --global user.githubuser "' + username + '"', { silent: true });
-  }
+  return new Promise((resolve, reject) => {
+    if (!_shelljs2.default.which('git')) {
+      return reject('This script requires local git installed!');
+    }
+    _shelljs2.default.exec('git config --global user.githubuser "' + username + '"', { silent: true }, (code, stdout, stderr) => {
+      if (code !== 0) {
+        return reject(stderr);
+      }
+      return resolve();
+    });
+  });
 }
 
 function gitInit() {
   return new Promise((resolve, reject) => {
-    if (_shelljs2.default.which('git')) {
-      _shelljs2.default.exec('git init', { silent: true }, (code, stdout, stderr) => {
-        return resolve();
-      });
+    if (!_shelljs2.default.which('git')) {
+      return reject('This script requires local git installed!');
     }
+    _shelljs2.default.exec('git init', { silent: true }, (code, stdout, stderr) => {
+      if (code !== 0) {
+        return reject(stderr);
+      }
+      return resolve();
+    });
   });
 }
 
 function gitRemote(config) {
   return new Promise((resolve, reject) => {
-    if (_shelljs2.default.which('git')) {
-      _shelljs2.default.exec('git remote add ' + config.name + ' ' + config.url, { silent: true }, (code, stdout, stderr) => {
-        resolve();
-      });
+    if (!_shelljs2.default.which('git')) {
+      return reject('This script requires local git installed!');
     }
+    _shelljs2.default.exec('git remote add ' + config.name + ' ' + config.url, { silent: true }, (code, stdout, stderr) => {
+      if (code !== 0) {
+        return reject(stderr);
+      }
+      return resolve();
+    });
   });
 }
 
 function gitRemotes() {
   return new Promise((resolve, reject) => {
-    if (_shelljs2.default.which('git')) {
-      _shelljs2.default.exec('git remote -v', { silent: true }, (code, stdout, stderr) => {
-        let remotes = stdout.split('\n');
-        resolve(remotes);
-      });
+    if (!_shelljs2.default.which('git')) {
+      return reject('This script requires local git installed!');
     }
+    _shelljs2.default.exec('git remote -v', { silent: true }, (code, stdout, stderr) => {
+      if (code !== 0) {
+        return reject(stderr);
+      }
+      let remotes = stdout.split('\n');
+      return resolve(remotes);
+    });
   });
 }
 
 function checkRemote(name) {
   return new Promise((resolve, reject) => {
     gitRemotes().then(remotes => {
-      //console.log(remotes);
+
       let regex = new RegExp('^' + name + '\t');
       remotes.forEach(remote => {
         if (regex.test(remote)) {
-          console.log('Exists!!!!');
-          resolve('Remote name already exists');
+          return resolve('Remote name already exists');
         }
       });
-      resolve(true);
+      return resolve(true);
+    }).catch(err => {
+      return reject(err);
     });
   });
 }
 
 function gitPull(config) {
   return new Promise((resolve, reject) => {
-    if (_shelljs2.default.which('git')) {
-      _shelljs2.default.exec('git pull ' + config.gitinit.name + ' master', (code, stdout, stderr) => {
-        resolve();
-      });
+    if (!_shelljs2.default.which('git')) {
+      return reject('This script requires local git installed!');
     }
+    _shelljs2.default.exec('git pull ' + config.name + ' master', { silent: true }, (code, stdout, stderr) => {
+      if (code !== 0) {
+        return reject(stderr);
+      }
+      return resolve();
+    });
   });
 }
 
 function gitCommit(config) {
   return new Promise((resolve, reject) => {
-    if (_shelljs2.default.which('git')) {
-      _shelljs2.default.exec('git add -A && git commit -m "' + config.message + '"', (code, stdout, stderr) => {
-        return resolve();
-      });
+    if (!_shelljs2.default.which('git')) {
+      return reject('This script requires local git installed!');
     }
+    _shelljs2.default.exec('git add -A && git commit -m "' + config.message + '"', { silent: true }, (code, stdout, stderr) => {
+      if (code !== 0) {
+        return reject(stderr);
+      }
+      return resolve();
+    });
   });
 }
 
 function gitPush(config) {
   return new Promise((resolve, reject) => {
-    if (_shelljs2.default.which('git')) {
-      _shelljs2.default.exec('git push ' + (config.name === 'origin' ? '-u' : '') + ' ' + config.name + ' ' + config.branch, (code, stdout, stderr) => {
-        resolve();
-      });
+    if (!_shelljs2.default.which('git')) {
+      return reject('This script requires local git installed!');
     }
+    _shelljs2.default.exec('git push' + (config.name === 'origin' ? ' -u ' : ' ') + config.name + ' ' + config.branch, { silent: true }, (code, stdout, stderr) => {
+      if (code !== 0) {
+        return reject(stderr);
+      }
+      return resolve();
+    });
   });
 }

@@ -8,10 +8,12 @@ let sandbox;
 describe('generator-github-create:create', () => {
 
   beforeEach(() => {
+    github.init();
     return sandbox = sinon.sandbox.create();
   });
 
   afterEach(() => {
+    github.destroy();
     return sandbox.restore();
   });
 
@@ -27,7 +29,10 @@ describe('generator-github-create:create', () => {
         .withGenerators(create.deps)
         .withPrompts(create.prompts)
         .withOptions(create.options)
-        .toPromise();
+        .toPromise()
+        .catch(err => {
+          console.log(err);
+        });
     });
 
     it('should generate a config file', () => {

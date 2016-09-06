@@ -94,7 +94,7 @@ class GithubGitInitGenerator extends _yeomanGenerator.Base {
   }
 
   default() {
-    return shell.gitInit(this.config.get('gitinit')).then(() => shell.gitRemote(this.config.get('gitinit'))).then(() => shell.gitPull(this.config.getAll()));
+    return shell.gitInit(this.config.get('gitinit')).then(() => shell.gitRemote(this.config.get('gitinit'))).then(() => shell.gitPull(this.config.get('gitinit')));
   }
 
 }

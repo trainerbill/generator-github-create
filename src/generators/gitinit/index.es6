@@ -82,7 +82,7 @@ class GithubGitInitGenerator extends Base {
   default() {
     return shell.gitInit(this.config.get('gitinit'))
       .then(() => shell.gitRemote(this.config.get('gitinit')))
-      .then(() => shell.gitPull(this.config.getAll()));
+      .then(() => shell.gitPull(this.config.get('gitinit')));
   }
 
 }
