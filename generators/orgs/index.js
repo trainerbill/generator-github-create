@@ -32,13 +32,6 @@ class GithubOrgsGenerator extends _yeomanGenerator.Base {
       alias: 'o',
       desc: 'Organization'
     });
-
-    this.config.set('orgs', (0, _lodash2.default)(this.config.get('orgs'), {
-      'skip-prompt': this.options['skip-prompt'],
-      org: this.options.org
-    }));
-
-    this.config.save();
   }
 
   initializing() {
@@ -47,6 +40,14 @@ class GithubOrgsGenerator extends _yeomanGenerator.Base {
     if (!github.get()) {
       this.composeWith('github-create:authenticate');
     }
+
+    let config = {
+      'skip-prompt': this.options['skip-prompt'],
+      org: this.options.org
+    };
+
+    this.config.set('orgs', config);
+    return this.config.save();
   }
 
   prompting() {
@@ -80,10 +81,12 @@ class GithubOrgsGenerator extends _yeomanGenerator.Base {
       }];
     }).then(prompts => this.prompt(prompts)).then(answers => {
       this.config.set('orgs', answers);
-      this.config.save();
     });
   }
 
+  configuring() {
+    return this.config.save();
+  }
 }
 
 module.exports = GithubOrgsGenerator;

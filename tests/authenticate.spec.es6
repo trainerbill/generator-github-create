@@ -27,8 +27,8 @@ describe('generator-github-create:authenticate', () => {
       getAuthorizationStub = sandbox.stub(github, 'getAuthorization').resolves();
       deleteAuthorizationStub = sandbox.stub(github, 'deleteAuthorization').resolves();
       createAuthorizationStub = sandbox.stub(github, 'createAuthorization').resolves();
-      saveUsernameStub = sandbox.stub(shell, 'saveUsername').returns(true);
-      getUsernameStub = sandbox.stub(shell, 'getUsername').returns('testyok');
+      saveUsernameStub = sandbox.stub(shell, 'saveUsername').resolves(true);
+      getUsernameStub = sandbox.stub(shell, 'getUsername').resolves('testyok');
       return helpers.run(path.join(__dirname, authenticate.src))
         .withPrompts(authenticate.prompts)
         .toPromise();

@@ -40,12 +40,16 @@ class GithubGitInitGenerator extends _yeomanGenerator.Base {
       desc: 'RemoteName: git remote add <name> https://blah',
       defaults: 'origin'
     });
+  }
 
-    this.config.set('gitinit', (0, _lodash2.default)(this.config.get('gitinit'), {
+  initializing() {
+
+    let config = {
       'skip-prompt': this.options['skip-prompt'],
       name: this.options.name
-    }));
+    };
 
+    this.config.set('gitinit', config);
     this.config.save();
   }
 

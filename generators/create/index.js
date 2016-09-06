@@ -82,19 +82,6 @@ class GitCreateGenerator extends _yeomanGenerator.Base {
       desc: 'Repository License.  isc|mit|apache',
       defaults: 'isc'
     });
-
-    this.config.set('create', (0, _lodash2.default)(this.config.get('create'), {
-      'skip-prompt': this.options['skip-prompt'],
-      autoinit: this.options.autoinit,
-      name: this.options.name,
-      description: this.options.description,
-      private: this.options.private,
-      license: this.options.license,
-      org: this.options.org,
-      user: this.options.user
-    }));
-
-    this.config.save();
   }
 
   initializing() {
@@ -103,6 +90,20 @@ class GitCreateGenerator extends _yeomanGenerator.Base {
     if (!github.get()) {
       this.composeWith('github-create:authenticate');
     }
+
+    let config = {
+      'skip-prompt': this.options['skip-prompt'],
+      autoinit: this.options.autoinit,
+      name: this.options.name,
+      description: this.options.description,
+      private: this.options.private,
+      license: this.options.license,
+      org: this.options.org,
+      user: this.options.user
+    };
+
+    this.config.set('create', config);
+    return this.config.save();
   }
 
   prompting() {
@@ -160,8 +161,11 @@ class GitCreateGenerator extends _yeomanGenerator.Base {
       }
 
       this.config.set('create', (0, _lodash2.default)(this.config.get('create'), answers));
-      this.config.save();
     });
+  }
+
+  configuring() {
+    this.config.save();
   }
 
   default() {

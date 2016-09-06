@@ -29,13 +29,17 @@ class GithubGitInitGenerator extends Base {
       defaults: 'origin'
     });
 
-    this.config.set('gitinit', merge(this.config.get('gitinit'), {
+  }
+
+  initializing() {
+
+    let config = {
       'skip-prompt': this.options['skip-prompt'],
       name: this.options.name
-    }));
+    };
 
+    this.config.set('gitinit', config);
     this.config.save();
-
   }
 
   prompting() {

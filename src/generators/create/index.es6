@@ -65,7 +65,16 @@ class GitCreateGenerator extends Base {
       defaults: 'isc'
     });
 
-    this.config.set('create', merge(this.config.get('create'), {
+  }
+
+  initializing() {
+    //Authenticate Github API
+    /* istanbul ignore if */
+    if (!github.get()) {
+      this.composeWith('github-create:authenticate');
+    }
+
+    let config = {
       'skip-prompt': this.options['skip-prompt'],
       autoinit: this.options.autoinit,
       name: this.options.name,
@@ -74,17 +83,10 @@ class GitCreateGenerator extends Base {
       license: this.options.license,
       org: this.options.org,
       user: this.options.user
-    }));
+    };
 
-    this.config.save();
-  }
-
-  initializing() {
-    //Authenticate Github API
-      /* istanbul ignore if */
-    if (!github.get()) {
-      this.composeWith('github-create:authenticate');
-    }
+    this.config.set('create', config);
+    return this.config.save();
   }
 
   prompting() {
@@ -155,8 +157,11 @@ class GitCreateGenerator extends Base {
         }
 
         this.config.set('create', merge(this.config.get('create'), answers));
-        this.config.save();
       });
+  }
+
+  configuring() {
+    this.config.save();
   }
 
   default() {

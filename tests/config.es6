@@ -86,7 +86,7 @@ export let authenticate = {
           'debug': false,
           'host': 'api.github.com',
           'protocol': 'https',
-          'pathPrefix': '',
+          'pathPrefix': '/',
           'headers': {
             'user-agent': 'generator-github-create'
           },
@@ -180,6 +180,35 @@ export let gitpush = {
         'message': 'Test Message',
         'name': 'testorigin',
         'branch': 'branchy'
+      }
+    }
+  }
+};
+
+
+export let app = {
+  src: '../src/generators/app',
+  deps: [
+    [helpers.createDummyGenerator(), 'github-create:authenticate'],
+    [helpers.createDummyGenerator(), 'github-create:orgs'],
+    [helpers.createDummyGenerator(), 'github-create:create'],
+    [helpers.createDummyGenerator(), 'github-create:readme'],
+    [helpers.createDummyGenerator(), 'github-create:gitinit'],
+    [helpers.createDummyGenerator(), 'github-create:gitpush']
+  ],
+  prompts: {
+    'skip-prompt': false,
+    use: true,
+    org: 'test-org'
+  },
+  options: {
+    'skip-prompt': false,
+    org: 'test-org'
+  },
+  save: {
+    'generator-github-create': {
+      'orgs': {
+        'org': 'test-org'
       }
     }
   }

@@ -47,25 +47,20 @@ class GithubReadmeGenerator extends Base {
       desc: 'Skip prompting.  You will either need to supply all arguments or the defaults will be used.',
       defaults: false
     });
+  }
 
-    this.config.set('readme', merge(this.config.get('readme'), {
+  initializing() {
+    this.allBadges = ['travis', 'coveralls','david','davidDev','gitter','npm'];
+    let config = {
       'skip-prompt': this.options['skip-prompt'],
       badges: this.options.badges.split(','),
       profile: this.options.profile,
       repository: this.options.repository,
       title: this.options.title,
       description: this.options.description
-    }));
-
-    this.config.save();
-
+    };
+    return this.config.set('readme', config);
   }
-
-  initializing() {
-    this.allBadges = ['travis', 'coveralls','david','davidDev','gitter','npm'];
-  }
-
-
 
   prompting() {
     let config = this.config.get('readme');
@@ -115,8 +110,11 @@ class GithubReadmeGenerator extends Base {
     return this.prompt(prompts)
       .then(answers => {
         this.config.set('readme', merge(this.config.get('readme'), answers));
-        this.config.save();
       });
+  }
+
+  configuring() {
+    this.config.save();
   }
 
   writing() {

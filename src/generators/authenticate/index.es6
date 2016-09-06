@@ -70,64 +70,70 @@ class GithubAuthenticateGenerator extends Base {
       desc: 'App URL for Github Authorization'
     });
 
-    this.config.set('authenticate', merge(this.config.get('authenticate'), {
+  }
+
+  initializing() {
+
+    let config = {
       twofactor: this.options.twofactor,
       github: {
         debug: this.options.debug,
         host: this.options.host,
         protocol: this.options.protocol,
-        pathPrefix: this.options.path,
+        pathPrefix: this.options.path || '/',
         headers: {
           'user-agent': this.options.appName
         },
         scopes: this.options.scopes.trim(this.options.scopes.split(','))
       },
-      username: this.options.username || shell.getUsername(),
+      username: this.options.username,
       appName: this.options.appName,
       appUrl: this.options.appUrl
-    }));
+    };
 
-    this.config.save();
+    return shell.getUsername()
+      .then(username => {
+        if (!config.username) {
+          config.username = username;
+        }
 
-  }
-
-  initializing() {
-    let config = this.config.get('authenticate');
-    //Initialize Github API
-    github.get() || github.init(config.github);
-
-    let prompts = [
-      {
-        name    : 'username',
-        message : 'Github Username',
-        default: config.username
-      },
-      {
-        when: (answers) => { return answers.username !== config.username; },
-        type: 'confirm',
-        name: 'saveuser',
-        message: 'Save username to git config?  Will make generation faster next time',
-        default: 'Y'
-      },
-      {
-        type    : 'password',
-        name    : 'password',
-        message : 'Github Password'
-      },
-      {
-        type: 'confirm',
-        name    : 'twofactor',
-        message : 'Use two factor authentication?',
-        default: config.twofactor || false
-      },
-      {
-        when: (answers) => { return answers.twofactor; },
-        name    : 'twofactorcode',
-        message : 'Two Factor Code'
-      }
-    ];
-
-    return this.prompt(prompts)
+        return config;
+      })
+      .then(config => this.config.set('authenticate', config))
+      .then(github.get() || github.init(config.github))
+      .then(() => {
+        return [
+          {
+            name    : 'username',
+            message : 'Github Username',
+            default: config.username
+          },
+          {
+            when: (answers) => { return answers.username !== config.username; },
+            type: 'confirm',
+            name: 'saveuser',
+            message: 'Save username to git config?  Will make generation faster next time',
+            default: 'Y'
+          },
+          {
+            type    : 'password',
+            name    : 'password',
+            message : 'Github Password'
+          },
+          {
+            type: 'confirm',
+            name    : 'twofactor',
+            message : 'Use two factor authentication?',
+            default: config.twofactor || false
+          },
+          {
+            when: (answers) => { return answers.twofactor; },
+            name    : 'twofactorcode',
+            message : 'Two Factor Code'
+          }
+        ];
+      })
+      .then(prompts => this.prompt(prompts))
       .then(answers => {
         this.password = answers.password;
         this.twofactorcode = answers.twofactorcode;

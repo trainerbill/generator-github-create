@@ -47,13 +47,17 @@ class GithubGitPushGenerator extends _yeomanGenerator.Base {
       desc: 'Git commit message',
       defaults: 'Initial Commit'
     });
+  }
 
-    this.config.set('gitpush', (0, _lodash2.default)(this.config.get('gitpush'), {
+  initializing() {
+    let config = {
       'skip-prompt': this.options['skip-prompt'],
       message: this.options.message,
       name: this.options.name,
       branch: this.options.branch
-    }));
+    };
+    this.config.set('gitpush', config);
+    return this.config.save();
   }
 
   prompting() {

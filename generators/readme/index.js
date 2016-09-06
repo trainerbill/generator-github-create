@@ -58,21 +58,19 @@ class GithubReadmeGenerator extends _yeomanGenerator.Base {
       desc: 'Skip prompting.  You will either need to supply all arguments or the defaults will be used.',
       defaults: false
     });
+  }
 
-    this.config.set('readme', (0, _lodash2.default)(this.config.get('readme'), {
+  initializing() {
+    this.allBadges = ['travis', 'coveralls', 'david', 'davidDev', 'gitter', 'npm'];
+    let config = {
       'skip-prompt': this.options['skip-prompt'],
       badges: this.options.badges.split(','),
       profile: this.options.profile,
       repository: this.options.repository,
       title: this.options.title,
       description: this.options.description
-    }));
-
-    this.config.save();
-  }
-
-  initializing() {
-    this.allBadges = ['travis', 'coveralls', 'david', 'davidDev', 'gitter', 'npm'];
+    };
+    return this.config.set('readme', config);
   }
 
   prompting() {
@@ -121,8 +119,11 @@ class GithubReadmeGenerator extends _yeomanGenerator.Base {
 
     return this.prompt(prompts).then(answers => {
       this.config.set('readme', (0, _lodash2.default)(this.config.get('readme'), answers));
-      this.config.save();
     });
+  }
+
+  configuring() {
+    this.config.save();
   }
 
   writing() {
