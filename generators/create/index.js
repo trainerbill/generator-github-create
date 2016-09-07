@@ -38,18 +38,23 @@ class GitCreateGenerator extends _yeomanGenerator.Base {
       desc: 'Skip prompting.  You will either need to supply all arguments or the defaults will be used.'
     });
 
-    this.option('autoinit', {
-      type: String,
-      alias: 'a',
-      defaults: false,
-      desc: 'AutoInit: Add license and README to remote repository'
-    });
-
     this.option('user', {
       type: String,
       alias: 'u',
       desc: 'Github Username. Creates the repository on the user',
       defaults: false
+    });
+
+    this.option('init', {
+      type: String,
+      alias: 'i',
+      desc: 'initialize local git'
+    });
+
+    this.option('push', {
+      type: String,
+      alias: 'p',
+      desc: 'initial commit and push repository'
     });
 
     this.option('org', {
@@ -75,7 +80,7 @@ class GitCreateGenerator extends _yeomanGenerator.Base {
 
     this.option('private', {
       type: String,
-      alias: 'd',
+      alias: 'a',
       desc: 'Repository Access.  private|public',
       defaults: false
     });
@@ -90,13 +95,14 @@ class GitCreateGenerator extends _yeomanGenerator.Base {
 
     let config = {
       'skip-prompt': this.options['skip-prompt'],
-      autoinit: this.options.autoinit,
       name: this.options.name,
       description: this.options.description,
       private: this.options.private,
       license: this.options.license,
       org: this.options.org,
-      user: this.options.user
+      user: this.options.user,
+      init: this.options.init,
+      push: this.options.push
     };
 
     this.config.set('create', config);

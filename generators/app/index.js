@@ -70,20 +70,6 @@ class GitGenerator extends _yeomanGenerator.Base {
     }
   }
 
-  install() {
-    if (this.generators.indexOf('gitinit') !== -1) {
-      this.composeWith('github-create:gitinit', {
-        args: this.config.get('create') ? this.config.get('create').urls : undefined
-      });
-    }
-  }
-
-  end() {
-    if (this.generators.indexOf('gitpush') !== -1) {
-      this.composeWith('github-create:gitpush');
-    }
-  }
-
 }
 
 module.exports = GitGenerator;

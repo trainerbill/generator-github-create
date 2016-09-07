@@ -140,8 +140,7 @@ function createRepository(config) {
         name: config.name,
         description: config.description,
         private: config.private,
-        license_template: config.license,
-        auto_init: config.autoinit
+        auto_init: false
       }, (err, res) => {
         if (err) {
           return reject(err);
@@ -153,8 +152,7 @@ function createRepository(config) {
         name: config.name,
         description: config.description,
         private: config.private,
-        license_template: config.license,
-        auto_init: config.autoinit
+        auto_init: false
       }, (err, res) => {
         if (err) {
           return reject(err);
