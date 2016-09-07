@@ -6,6 +6,10 @@ var _github = require('../shared/github');
 
 var github = _interopRequireWildcard(_github);
 
+var _shell = require('../shared/shell');
+
+var shell = _interopRequireWildcard(_shell);
+
 var _lodash = require('lodash.merge');
 
 var _lodash2 = _interopRequireDefault(_lodash);
@@ -75,13 +79,6 @@ class GitCreateGenerator extends _yeomanGenerator.Base {
       desc: 'Repository Access.  private|public',
       defaults: false
     });
-
-    this.option('license', {
-      type: String,
-      alias: 'l',
-      desc: 'Repository License.  isc|mit|apache',
-      defaults: 'isc'
-    });
   }
 
   initializing() {
@@ -108,6 +105,11 @@ class GitCreateGenerator extends _yeomanGenerator.Base {
 
   prompting() {
     let config = this.config.get('create');
+    //Check for org config
+    if (!config.org) {
+      config.org = this.config.get('orgs') ? this.config.get('orgs').org : undefined;
+      this.config.set('create', config);
+    }
 
     if (config['skip-prompt']) {
       return true;
@@ -137,21 +139,6 @@ class GitCreateGenerator extends _yeomanGenerator.Base {
           name: 'Private - You have to pay for this',
           value: true
         }]
-      }, {
-        type: 'list',
-        name: 'license',
-        message: 'License',
-        default: config.license,
-        choices: [{
-          name: 'ISC',
-          value: 'isc'
-        }, {
-          name: 'MIT',
-          value: 'mit'
-        }, {
-          name: 'Apache',
-          value: 'apache'
-        }]
       }];
     }).then(prompts => this.prompt(prompts)).then(answers => {
       //Hack to save user from authenticate config
@@ -159,7 +146,27 @@ class GitCreateGenerator extends _yeomanGenerator.Base {
       if (!config.user) {
         answers.user = this.config.get('authenticate').username || undefined;
       }
-
+      this.config.set('create', (0, _lodash2.default)(this.config.get('create'), answers));
+    }).then(() => {
+      if (this.fs.exists('.git/config')) {
+        this.log('Skipping Git Init:  Git is already initialized in this directoy.  You need to delete the .git folder before you can initialize and push this repository.');
+        return [];
+      }
+      return [{
+        type: 'confirm',
+        name: 'init',
+        message: 'Initialize Local Git?',
+        default: true
+      }, {
+        when: answers => {
+          return answers.init;
+        },
+        type: 'confirm',
+        name: 'push',
+        message: 'Push initial commit?',
+        default: true
+      }];
+    }).then(prompts => this.prompt(prompts)).then(answers => {
       this.config.set('create', (0, _lodash2.default)(this.config.get('create'), answers));
     });
   }
@@ -169,10 +176,35 @@ class GitCreateGenerator extends _yeomanGenerator.Base {
   }
 
   default() {
+    let config = this.config.get('create');
+
     return github.createRepository(this.config.get('create')).then(repo => {
-      this.config.set('create', (0, _lodash2.default)(this.config.get('create'), { urls: [repo.html_url, repo.ssh_url] }));
+      this.config.set('create', (0, _lodash2.default)(this.config.get('create'), { urls: [repo.html_url, repo.ssh_url, repo.clone_url] }));
       this.config.save();
-    });
+      return this.config.get('create');
+    }).then(config => shell.gitInit(config)).then(config => shell.gitRemote(config));
+  }
+
+  writing() {
+    if (this.fs.exists(this.destinationPath('package.json'))) {
+      //Write to package.json
+      var pkg = this.fs.readJSON(this.destinationPath('package.json'), {});
+      pkg.repository = {
+        type: 'git',
+        url: this.config.get('create').urls[2]
+      };
+      pkg.bugs = {
+        url: this.config.get('create').urls[0] + '/issues'
+      };
+      pkg.homepage = this.config.get('create').urls[0] + '#readme';
+      this.fs.writeJSON(this.destinationPath('package.json'), pkg);
+    }
+  }
+
+  install() {
+    if (this.config.get('create').push) {
+      return shell.gitCommit().then(() => shell.gitPush());
+    }
   }
 
 }

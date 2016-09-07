@@ -1,5 +1,6 @@
 import { Base } from 'yeoman-generator';
 import * as github from '../shared/github';
+import * as shell from '../shared/shell';
 import merge from 'lodash.merge';
 import find from 'lodash.find';
 import path from 'path';
@@ -16,18 +17,23 @@ class GitCreateGenerator extends Base {
       desc: 'Skip prompting.  You will either need to supply all arguments or the defaults will be used.'
     });
 
-    this.option('autoinit', {
-      type: String,
-      alias: 'a',
-      defaults: false,
-      desc: 'AutoInit: Add license and README to remote repository'
-    });
-
     this.option('user', {
       type: String,
       alias: 'u',
       desc: 'Github Username. Creates the repository on the user',
       defaults: false
+    });
+
+    this.option('init', {
+      type: String,
+      alias: 'i',
+      desc: 'initialize local git'
+    });
+
+    this.option('push', {
+      type: String,
+      alias: 'p',
+      desc: 'initial commit and push repository'
     });
 
     this.option('org', {
@@ -53,16 +59,9 @@ class GitCreateGenerator extends Base {
 
     this.option('private', {
       type: String,
-      alias: 'd',
+      alias: 'a',
       desc: 'Repository Access.  private|public',
       defaults: false
-    });
-
-    this.option('license', {
-      type: String,
-      alias: 'l',
-      desc: 'Repository License.  isc|mit|apache',
-      defaults: 'isc'
     });
 
   }
@@ -76,13 +75,14 @@ class GitCreateGenerator extends Base {
 
     let config = {
       'skip-prompt': this.options['skip-prompt'],
-      autoinit: this.options.autoinit,
       name: this.options.name,
       description: this.options.description,
       private: this.options.private,
       license: this.options.license,
       org: this.options.org,
-      user: this.options.user
+      user: this.options.user,
+      init: this.options.init,
+      push: this.options.push
     };
 
     this.config.set('create', config);
@@ -91,6 +91,11 @@ class GitCreateGenerator extends Base {
 
   prompting() {
     let config = this.config.get('create');
+    //Check for org config
+    if (!config.org) {
+      config.org = this.config.get('orgs') ? this.config.get('orgs').org : undefined;
+      this.config.set('create', config);
+    }
 
     if (config['skip-prompt']) {
       return true;
@@ -126,26 +131,7 @@ class GitCreateGenerator extends Base {
               }
             ]
           },
-          {
-            type: 'list',
-            name: 'license',
-            message: 'License',
-            default: config.license,
-            choices: [
-              {
-                name: 'ISC',
-                value: 'isc'
-              },
-              {
-                name: 'MIT',
-                value: 'mit'
-              },
-              {
-                name: 'Apache',
-                value: 'apache'
-              }
-            ]
-          }
+
         ];
       })
       .then(prompts => this.prompt(prompts))
@@ -155,7 +141,31 @@ class GitCreateGenerator extends Base {
         if (!config.user) {
           answers.user = this.config.get('authenticate').username || undefined;
         }
-
+        this.config.set('create', merge(this.config.get('create'), answers));
+      })
+      .then(() => {
+        if (this.fs.exists('.git/config')) {
+          this.log('Skipping Git Init:  Git is already initialized in this directoy.  You need to delete the .git folder before you can initialize and push this repository.');
+          return [];
+        }
+        return [
+          {
+            type: 'confirm',
+            name: 'init',
+            message: 'Initialize Local Git?',
+            default: true
+          },
+          {
+            when: (answers) => { return answers.init; },
+            type: 'confirm',
+            name: 'push',
+            message: 'Push initial commit?',
+            default: true
+          }
+        ];
+      })
+      .then(prompts => this.prompt(prompts))
+      .then(answers => {
         this.config.set('create', merge(this.config.get('create'), answers));
       });
   }
@@ -165,11 +175,39 @@ class GitCreateGenerator extends Base {
   }
 
   default() {
+    let config = this.config.get('create');
+
     return github.createRepository(this.config.get('create'))
       .then(repo => {
-        this.config.set('create', merge(this.config.get('create'), { urls: [ repo.html_url, repo.ssh_url ] }));
+        this.config.set('create', merge(this.config.get('create'), { urls: [ repo.html_url, repo.ssh_url, repo.clone_url ] }));
         this.config.save();
-      });
+        return this.config.get('create');
+      })
+      .then(config => shell.gitInit(config))
+      .then(config => shell.gitRemote(config));
+  }
+
+  writing() {
+    if (this.fs.exists(this.destinationPath('package.json'))) {
+      //Write to package.json
+      var pkg = this.fs.readJSON(this.destinationPath('package.json'), {});
+      pkg.repository = {
+        type: 'git',
+        url: this.config.get('create').urls[2]
+      };
+      pkg.bugs = {
+        url: this.config.get('create').urls[0] + '/issues'
+      };
+      pkg.homepage = this.config.get('create').urls[0] + '#readme';
+      this.fs.writeJSON(this.destinationPath('package.json'), pkg);
+    }
+  }
+
+  install() {
+    if (this.config.get('create').push) {
+      return shell.gitCommit()
+        .then(() => shell.gitPush());
+    }
   }
 
 }

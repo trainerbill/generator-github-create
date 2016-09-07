@@ -18,31 +18,33 @@ class GithubReadmeGenerator extends _yeomanGenerator.Base {
 
   constructor(...args) {
     super(...args);
-
+    let createconfig = this.config.get('create');
     this.option('profile', {
       type: String,
       alias: 'p',
-      desc: 'Profile for badge.  Ex: https://david-dm.org/<PROFILE>/server-express-module'
+      desc: 'Profile for badge.  Ex: https://david-dm.org/<PROFILE>/server-express-module',
+      defaults: createconfig ? createconfig.org || createconfig.user : undefined
     });
 
     this.option('repository', {
       type: String,
       alias: 'r',
-      desc: 'Repository.  Ex: https://david-dm.org/trainerbill/<REPOSITORY>'
+      desc: 'Repository.  Ex: https://david-dm.org/trainerbill/<REPOSITORY>',
+      defaults: createconfig ? createconfig.name : undefined
     });
 
     this.option('title', {
       type: String,
       alias: 't',
       desc: 'Readme title',
-      defaults: 'Generated Repository'
+      defaults: createconfig ? createconfig.name : 'Generated Repository'
     });
 
     this.option('description', {
       type: String,
       alias: 'd',
       desc: 'Readme title',
-      defaults: 'Generated Repository'
+      defaults: createconfig ? createconfig.description : 'Generated Repository'
     });
 
     this.option('badges', {

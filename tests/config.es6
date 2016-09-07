@@ -110,7 +110,8 @@ export let create = {
     name: 'testrepository',
     description: 'Test Description',
     private: false,
-    licensce: 'isc'
+    init: true,
+    push: true
   },
   options: {
     debug: false,
@@ -118,17 +119,17 @@ export let create = {
     name: 'testrepository',
     description: 'Test Description',
     private: false,
-    licensce: 'isc'
+    init: true,
+    push: true
   },
   save: {
     'generator-github-create': {
       'create': {
-        'autoinit': false,
         'name': 'testrepository',
         'description': 'Test Description',
         'private': false,
-        'license': 'isc',
-        'org': false,
+        'init': true,
+        'push': true,
         'user': 'testuser',
         'urls': [
           'https://test',

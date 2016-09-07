@@ -60,8 +60,11 @@ export function saveUsername(username) {
   });
 }
 
-export function gitInit() {
+export function gitInit(config) {
   return new Promise((resolve, reject) => {
+    if (!config.init) {
+      return resolve(config);
+    }
     if (!shell.which('git')) {
       return reject('This script requires local git installed!');
     }
@@ -69,82 +72,34 @@ export function gitInit() {
       if (code !== 0) {
         return reject(stderr);
       }
-      return resolve();
+      return resolve(config);
     });
   });
 }
 
 export function gitRemote(config) {
   return new Promise((resolve, reject) => {
+    if (!config.init) {
+      return resolve(config);
+    }
     if (!shell.which('git')) {
       return reject('This script requires local git installed!');
     }
-    shell.exec('git remote add ' + config.name + ' ' + config.url, { silent: true }, (code, stdout, stderr) => {
+    shell.exec('git remote add origin ' + config.urls[1], { silent: true }, (code, stdout, stderr) => {
       if (code !== 0) {
         return reject(stderr);
       }
-      return resolve();
+      return resolve(config);
     });
   });
 }
 
-export function gitRemotes() {
+export function gitCommit() {
   return new Promise((resolve, reject) => {
     if (!shell.which('git')) {
       return reject('This script requires local git installed!');
     }
-    shell.exec('git remote -v', { silent: true }, (code, stdout, stderr) => {
-      if (code !== 0) {
-        return reject(stderr);
-      }
-      let remotes = stdout.split('\n');
-      return resolve(remotes);
-    });
-  });
-}
-
-export function checkRemote(name) {
-  return new Promise((resolve, reject) => {
-    gitRemotes()
-      .then(remotes => {
-
-        let regex = new RegExp('^' + name + '\t');
-        remotes.forEach(remote => {
-          if(regex.test(remote)) {
-            return resolve('Remote name already exists');
-          }
-        });
-        return resolve(true);
-      })
-      .catch(err => {
-        if (err === 'fatal: Not a git repository (or any of the parent directories): .git\n') {
-          return resolve(true);
-        }
-        return resolve(err);
-      });
-  });
-}
-
-export function gitPull(config) {
-  return new Promise((resolve, reject) => {
-    if (!shell.which('git')) {
-      return reject('This script requires local git installed!');
-    }
-    shell.exec('git pull ' + config.name + ' master', { silent: true }, (code, stdout, stderr) => {
-      if (code !== 0) {
-        return reject(stderr);
-      }
-      return resolve();
-    });
-  });
-}
-
-export function gitCommit(config) {
-  return new Promise((resolve, reject) => {
-    if (!shell.which('git')) {
-      return reject('This script requires local git installed!');
-    }
-    shell.exec('git add -A && git commit -m "' + config.message + '"', { silent: true }, (code, stdout, stderr) => {
+    shell.exec('git add -A && git commit -m "Initial Commit"', { silent: true }, (code, stdout, stderr) => {
       if (code !== 0) {
         return reject(stderr);
       }
@@ -154,12 +109,12 @@ export function gitCommit(config) {
 }
 
 
-export function gitPush(config) {
+export function gitPush() {
   return new Promise((resolve, reject) => {
     if (!shell.which('git')) {
       return reject('This script requires local git installed!');
     }
-    shell.exec('git push' + ((config.name === 'origin') ? ' -u ' : ' ') + config.name + ' ' + config.branch, { silent: true }, (code, stdout, stderr) => {
+    shell.exec('git push -u origin master', { silent: true }, (code, stdout, stderr) => {
       if (code !== 0) {
         return reject(stderr);
       }

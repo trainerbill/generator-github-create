@@ -378,7 +378,7 @@ describe('shared/github.es6', () => {
       describe('error', () => {
 
         beforeEach(() => {
-          repository = { org: 'testorg', name: 'test-repository', description: 'Test Repository', private: false, license: 'license', autoinit: false };
+          repository = { org: 'testorg', name: 'test-repository', description: 'Test Repository', private: false };
           stub = sandbox.stub(githubModule.get().repos, 'createForOrg').yields('error', null);
         });
 
@@ -391,7 +391,7 @@ describe('shared/github.es6', () => {
       describe('success', () => {
 
         beforeEach(() => {
-          repository = { org: 'testorg', name: 'test-repository', description: 'Test Repository', private: false, license: 'license', autoinit: false };
+          repository = { org: 'testorg', name: 'test-repository', description: 'Test Repository', private: false };
           rrepo = { html_url: 'https://test', ssh_url: 'git@test' };
           stub = sandbox.stub(githubModule.get().repos, 'createForOrg').yields(null, rrepo);
           return githubModule.createRepository(repository)
@@ -401,7 +401,7 @@ describe('shared/github.es6', () => {
         });
 
         it('should call github.users.getForOrg', () => {
-          return stub.should.have.been.calledWith({ org: 'testorg', name: 'test-repository', description: 'Test Repository', private: false, license_template: 'license', auto_init: false });
+          return stub.should.have.been.calledWith({ org: 'testorg', name: 'test-repository', description: 'Test Repository', private: false, auto_init: false });
         });
 
         it('should resolve the repo', () => {
@@ -417,7 +417,7 @@ describe('shared/github.es6', () => {
       describe('error', () => {
 
         beforeEach(() => {
-          repository = { name: 'test-repository', description: 'Test Repository', private: false, license: 'license', autoinit: false };
+          repository = { name: 'test-repository', description: 'Test Repository', private: false };
           stub = sandbox.stub(githubModule.get().repos, 'create').yields('error', null);
         });
 
@@ -430,7 +430,7 @@ describe('shared/github.es6', () => {
       describe('success', () => {
 
         beforeEach(() => {
-          repository = { name: 'test-repository', description: 'Test Repository', private: false, license: 'license', autoinit: false };
+          repository = { name: 'test-repository', description: 'Test Repository', private: false };
           rrepo = { html_url: 'https://test', ssh_url: 'git@test' };
           stub = sandbox.stub(githubModule.get().repos, 'create').yields(null, rrepo);
           return githubModule.createRepository(repository)
@@ -440,7 +440,7 @@ describe('shared/github.es6', () => {
         });
 
         it('should call github.users.getForOrg', () => {
-          return stub.should.have.been.calledWith({ name: 'test-repository', description: 'Test Repository', private: false, license_template: 'license', auto_init: false });
+          return stub.should.have.been.calledWith({ name: 'test-repository', description: 'Test Repository', private: false, auto_init: false });
         });
 
         it('should resolve the repo', () => {

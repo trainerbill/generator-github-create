@@ -222,12 +222,12 @@ describe('shared/shell.es6', () => {
       });
 
       it('should call shell.exec git init', () => {
-        shellModule.gitInit();
+        shellModule.gitInit({ init: true });
         return stub.should.have.been.calledWith('git init', { silent: true });
       });
 
       it('should resolve promise', () => {
-        return shellModule.gitInit().should.be.fulfilled;
+        return shellModule.gitInit({ init: true }).should.be.fulfilled;
       });
 
     });
@@ -239,7 +239,7 @@ describe('shared/shell.es6', () => {
       });
 
       it('should reject promise with error', () => {
-        return shellModule.gitInit().should.be.rejectedWith('We have an error');
+        return shellModule.gitInit({ init: true }).should.be.rejectedWith('We have an error');
       });
 
     });
@@ -251,7 +251,7 @@ describe('shared/shell.es6', () => {
       });
 
       it('should reject promise with error', () => {
-        return shellModule.gitInit().should.be.rejectedWith('This script requires local git installed!');
+        return shellModule.gitInit({ init: true }).should.be.rejectedWith('This script requires local git installed!');
       });
 
     });
@@ -262,8 +262,8 @@ describe('shared/shell.es6', () => {
 
     let stub,
       config = {
-        name: 'testy',
-        url: 'testurl'
+        init: true,
+        urls: ['test', 'testurl']
       };
 
     describe('success', () => {
@@ -274,7 +274,7 @@ describe('shared/shell.es6', () => {
 
       it('should call shell.exec git remote add', () => {
         shellModule.gitRemote(config);
-        return stub.should.have.been.calledWith('git remote add ' + config.name + ' ' + config.url, { silent: true });
+        return stub.should.have.been.calledWith('git remote add origin ' + config.urls[1], { silent: true });
       });
 
       it('should resolve promise', () => {
@@ -309,126 +309,9 @@ describe('shared/shell.es6', () => {
 
   });
 
-  describe('shell.gitRemotes', () => {
-
-    let stub,
-      output;
-
-    describe('success', () => {
-
-      beforeEach(() => {
-        output = 'this\nis\na\ntest';
-        stub = sandbox.stub(shell, 'exec').yields(0, output);
-      });
-
-      it('should call shell.exec git remote -v', () => {
-        shellModule.gitRemotes();
-        return stub.should.have.been.calledWith('git remote -v', { silent: true });
-      });
-
-      it('should return an array after splitting string', () => {
-        return shellModule.gitRemotes()
-          .then(res => {
-
-            return res.length.should.equal(4);
-          })
-      });
-
-    });
-
-    describe('error', () => {
-
-      beforeEach(() => {
-        stub = sandbox.stub(shell, 'exec').yields(1, 'testout', 'We have an error');
-      });
-
-      it('should reject promise with error', () => {
-        return shellModule.gitRemotes().should.be.rejectedWith('We have an error');
-      });
-
-    });
-
-    describe('no git', () => {
-
-      beforeEach(() => {
-        stub = sandbox.stub(shell, 'which').returns(false);
-      });
-
-      it('should reject promise with error', () => {
-        return shellModule.gitRemotes().should.be.rejectedWith('This script requires local git installed!');
-      });
-
-    });
-
-  });
-
-  describe('shell.checkRemote', () => {
-
-    let stub;
-
-    beforeEach(() => {
-      stub = sandbox.stub(shell, 'exec').yields(0, 'origin\t\n');
-    });
-
-    it('it should resolve true if name is not found in array', () => {
-      return shellModule.checkRemote('testy').should.eventually.equal(true);
-    });
-
-    it('it should resolve error if name is found in array', () => {
-      return shellModule.checkRemote('origin').should.eventually.equal('Remote name already exists');
-    });
-
-  });
-
-  describe('shell.gitPull', () => {
-
-    let stub;
-
-    describe('success', () => {
-
-      beforeEach(() => {
-        stub = sandbox.stub(shell, 'exec').yields(0, 'done');
-      });
-
-      it('should call shell.exec git pull testy master', () => {
-        shellModule.gitPull({ name: 'testy' });
-        return stub.should.have.been.calledWith('git pull testy master', { silent: true });
-      });
-
-    });
-
-    describe('error', () => {
-
-      beforeEach(() => {
-        stub = sandbox.stub(shell, 'exec').yields(1, 'testout', 'We have an error');
-      });
-
-      it('should reject promise with error', () => {
-        return shellModule.gitPull({ name: 'testy' }).should.be.rejectedWith('We have an error');
-      });
-
-    });
-
-    describe('no git', () => {
-
-      beforeEach(() => {
-        stub = sandbox.stub(shell, 'which').returns(false);
-      });
-
-      it('should reject promise with error', () => {
-        return shellModule.gitPull({ name: 'testy' }).should.be.rejectedWith('This script requires local git installed!');
-      });
-
-    });
-
-  });
-
   describe('shell.gitCommit', () => {
 
-    let stub,
-      config = {
-        message: 'Test Message'
-      };
+    let stub;
 
     describe('success', () => {
 
@@ -437,8 +320,8 @@ describe('shared/shell.es6', () => {
       });
 
       it('should call shell.exec with add and commit', () => {
-        shellModule.gitCommit(config);
-        return stub.should.have.been.calledWith('git add -A && git commit -m "'+ config.message +'"', { silent: true });
+        shellModule.gitCommit();
+        return stub.should.have.been.calledWith('git add -A && git commit -m "Initial Commit"', { silent: true });
       });
 
     });
@@ -450,7 +333,7 @@ describe('shared/shell.es6', () => {
       });
 
       it('should reject promise with error', () => {
-        return shellModule.gitCommit(config).should.be.rejectedWith('We have an error');
+        return shellModule.gitCommit().should.be.rejectedWith('We have an error');
       });
 
     });
@@ -462,7 +345,7 @@ describe('shared/shell.es6', () => {
       });
 
       it('should reject promise with error', () => {
-        return shellModule.gitCommit(config).should.be.rejectedWith('This script requires local git installed!');
+        return shellModule.gitCommit().should.be.rejectedWith('This script requires local git installed!');
       });
 
     });
@@ -471,11 +354,7 @@ describe('shared/shell.es6', () => {
 
   describe('shell.gitPush', () => {
 
-    let stub,
-      config = {
-        name: 'testy',
-        branch: 'testbranch'
-      };
+    let stub;
 
     describe('success', () => {
 
@@ -484,8 +363,8 @@ describe('shared/shell.es6', () => {
       });
 
       it('should call shell.exec with git push', () => {
-        shellModule.gitPush(config);
-        return stub.should.have.been.calledWith('git push '+ config.name +' ' + config.branch, { silent: true });
+        shellModule.gitPush();
+        return stub.should.have.been.calledWith('git push -u origin master', { silent: true });
       });
 
     });
@@ -497,7 +376,7 @@ describe('shared/shell.es6', () => {
       });
 
       it('should reject promise with error', () => {
-        return shellModule.gitPush(config).should.be.rejectedWith('We have an error');
+        return shellModule.gitPush().should.be.rejectedWith('We have an error');
       });
 
     });
@@ -509,7 +388,7 @@ describe('shared/shell.es6', () => {
       });
 
       it('should reject promise with error', () => {
-        return shellModule.gitPush(config).should.be.rejectedWith('This script requires local git installed!');
+        return shellModule.gitPush().should.be.rejectedWith('This script requires local git installed!');
       });
 
     });

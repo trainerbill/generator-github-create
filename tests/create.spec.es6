@@ -21,12 +21,20 @@ describe('generator-github-create:create', () => {
 
     let getOrgsStub,
       getReposStub,
-      createRepositoryStub;
+      createRepositoryStub,
+      gitInitStub,
+      gitRemoteStub,
+      gitCommitStub,
+      gitPushStub;
 
     beforeEach(() => {
       getOrgsStub = sandbox.stub(github, 'getOrgs').resolves([{ login: 'org1' }, { login: 'org2' }]);
       getReposStub = sandbox.stub(github, 'getRepos').resolves([{ name: 'repo1' }, { name: 'repo2' }]);
       createRepositoryStub = sandbox.stub(github, 'createRepository').resolves({ html_url: 'https://test', ssh_url: 'git@test' });
+      gitInitStub = sandbox.stub(shell, 'gitInit').resolves();
+      gitRemoteStub = sandbox.stub(shell, 'gitRemote').resolves();
+      gitCommitStub = sandbox.stub(shell, 'gitCommit').resolves();
+      gitPushStub = sandbox.stub(shell, 'gitPush').resolves();
       return helpers.run(path.join(__dirname, create.src))
         .withGenerators(create.deps)
         .withPrompts(create.prompts)
@@ -46,12 +54,20 @@ describe('generator-github-create:create', () => {
   describe('Skip prompt', () => {
 
     let getOrgsStub,
-      createRepositoryStub;
+      createRepositoryStub,
+      gitInitStub,
+      gitRemoteStub,
+      gitCommitStub,
+      gitPushStub;
 
     beforeEach(() => {
       create.options['skip-prompt'] = true;
       getOrgsStub = sandbox.stub(github, 'getOrgs').resolves([{ name: 'repo1' }, { name: 'repo2' }]);
       createRepositoryStub = sandbox.stub(github, 'createRepository').resolves({ html_url: 'https://test', ssh_url: 'git@test' });
+      gitInitStub = sandbox.stub(shell, 'gitInit').resolves();
+      gitRemoteStub = sandbox.stub(shell, 'gitRemote').resolves();
+      gitPushStub = sandbox.stub(shell, 'gitPush').resolves();
+      gitCommitStub = sandbox.stub(shell, 'gitCommit').resolves();
       return helpers.run(path.join(__dirname, create.src))
         .withGenerators(create.deps)
         .withOptions(create.options)

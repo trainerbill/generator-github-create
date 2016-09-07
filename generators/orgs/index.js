@@ -81,6 +81,7 @@ class GithubOrgsGenerator extends _yeomanGenerator.Base {
       }];
     }).then(prompts => this.prompt(prompts)).then(answers => {
       this.config.set('orgs', answers);
+      this.config.save();
     });
   }
 

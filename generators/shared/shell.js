@@ -78,8 +78,11 @@ function saveUsername(username) {
   });
 }
 
-function gitInit() {
+function gitInit(config) {
   return new Promise((resolve, reject) => {
+    if (!config.init) {
+      return resolve(config);
+    }
     if (!_shelljs2.default.which('git')) {
       return reject('This script requires local git installed!');
     }
@@ -87,21 +90,24 @@ function gitInit() {
       if (code !== 0) {
         return reject(stderr);
       }
-      return resolve();
+      return resolve(config);
     });
   });
 }
 
 function gitRemote(config) {
   return new Promise((resolve, reject) => {
+    if (!config.init) {
+      return resolve(config);
+    }
     if (!_shelljs2.default.which('git')) {
       return reject('This script requires local git installed!');
     }
-    _shelljs2.default.exec('git remote add ' + config.name + ' ' + config.url, { silent: true }, (code, stdout, stderr) => {
+    _shelljs2.default.exec('git remote add origin ' + config.urls[1], { silent: true }, (code, stdout, stderr) => {
       if (code !== 0) {
         return reject(stderr);
       }
-      return resolve();
+      return resolve(config);
     });
   });
 }
@@ -155,12 +161,12 @@ function gitPull(config) {
   });
 }
 
-function gitCommit(config) {
+function gitCommit() {
   return new Promise((resolve, reject) => {
     if (!_shelljs2.default.which('git')) {
       return reject('This script requires local git installed!');
     }
-    _shelljs2.default.exec('git add -A && git commit -m "' + config.message + '"', { silent: true }, (code, stdout, stderr) => {
+    _shelljs2.default.exec('git add -A && git commit -m "Initial Commit"', { silent: true }, (code, stdout, stderr) => {
       if (code !== 0) {
         return reject(stderr);
       }
@@ -169,12 +175,12 @@ function gitCommit(config) {
   });
 }
 
-function gitPush(config) {
+function gitPush() {
   return new Promise((resolve, reject) => {
     if (!_shelljs2.default.which('git')) {
       return reject('This script requires local git installed!');
     }
-    _shelljs2.default.exec('git push' + (config.name === 'origin' ? ' -u ' : ' ') + config.name + ' ' + config.branch, { silent: true }, (code, stdout, stderr) => {
+    _shelljs2.default.exec('git push -u origin master', { silent: true }, (code, stdout, stderr) => {
       if (code !== 0) {
         return reject(stderr);
       }
