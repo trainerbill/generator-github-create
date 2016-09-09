@@ -14,7 +14,8 @@ export let readme = {
       'davidDev'
     ],
     profile: 'test-profile',
-    repository: 'test-repository'
+    repository: 'test-repository',
+    scoped: true
   },
   options: {
     title: 'Repository Title',
@@ -38,7 +39,8 @@ export let readme = {
           'davidDev'
         ],
         'profile': 'test-profile',
-        'repository': 'test-repository'
+        'repository': 'test-repository',
+        'scoped': true
       }
     }
   }

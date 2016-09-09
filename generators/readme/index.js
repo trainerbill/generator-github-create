@@ -62,12 +62,6 @@ class GithubReadmeGenerator extends _yeomanGenerator.Base {
       alias: 'i',
       desc: 'Package is an npm scoped package Ex: @modern-mean/server-base-module'
     });
-
-    this.option('skip-prompt', {
-      type: String,
-      alias: 's',
-      desc: 'Skip prompting.  You will either need to supply all arguments or the defaults will be used.'
-    });
   }
 
   initializing() {
@@ -76,9 +70,6 @@ class GithubReadmeGenerator extends _yeomanGenerator.Base {
   }
 
   prompting() {
-    if (this.options['skip-prompt']) {
-      return true;
-    }
 
     let prompts = [{
       name: 'title',
