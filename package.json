@@ -34,7 +34,7 @@
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "build": "rm -rf ./generators && babel --out-dir ./generators --extensions .es6 --copy-files ./src/generators",
     "build:watch": "rm -rf ./generators && babel --watch --out-dir ./generators --extensions .es6 --copy-files ./src/generators",
-    "lint": "eslint --ignore-pattern **/templates ./tests/** ./src/**",
+    "lint": "eslint --ignore-pattern **/templates ./test/** ./src/**",
     "postversion": "git push && git push --tags && npm publish --access public",
     "release:patch": "npm test && npm run build && npm version patch",
     "release:minor": "npm test && npm run build && npm version minor",
