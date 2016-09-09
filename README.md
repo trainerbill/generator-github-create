@@ -45,8 +45,8 @@ Checkout the these generators to see how they all work together.
 [gitter-image]: https://badges.gitter.im/trainerbill.svg
 [gitter-url]: https://gitter.im/trainerbill?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
 
-[npm-image]: https://badge.fury.io/js/%40modern-mean%2Fgenerator-github-create.svg
-[npm-url]: https://npmjs.org/package/%40modern-mean%2Fgenerator-github-create
+[npm-image]: https://badge.fury.io/js/generator-github-create.svg
+[npm-url]: https://npmjs.org/package/generator-github-create
 
 [travis-image]: https://travis-ci.org/trainerbill/generator-github-create.svg?branch=master
 [travis-url]: https://travis-ci.org/trainerbill/generator-github-create
