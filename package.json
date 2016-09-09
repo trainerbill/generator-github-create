@@ -34,13 +34,13 @@
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "build": "rm -rf ./generators && babel --out-dir ./generators --extensions .es6 --copy-files ./src/generators",
     "build:watch": "rm -rf ./generators && babel --watch --out-dir ./generators --extensions .es6 --copy-files ./src/generators",
-    "lint": "eslint --ignore-pattern **/templates ./test/** ./src/**",
+    "lint": "eslint --ignore-pattern **/templates ./test/**/*.js ./src/**/*.js",
     "postversion": "git push && git push --tags && npm publish --access public",
     "release:patch": "npm test && npm run build && npm version patch",
     "release:minor": "npm test && npm run build && npm version minor",
     "release:major": "npm test && npm run build && npm version major",
-    "test": "npm run lint && cross-env NODE_ENV=test nyc --reporter=lcov --reporter=text mocha --compilers js:babel-core/register --require test/mocha.setup.js test/**/*.spec.js",
-    "test:watch": "npm run lint && cross-env NODE_ENV=test nyc --reporter=lcov --reporter=text mocha --watch --compilers js:babel-core/register --require test/mocha.setup.js test/**/*.spec.js"
+    "test": "npm run lint && cross-env NODE_ENV=test nyc mocha test/**/*.spec.js",
+    "test:watch": "npm run lint && cross-env NODE_ENV=test nyc mocha --watch test/**/*.spec.js"
   },
   "repository": {
     "type": "git",
@@ -79,5 +79,21 @@
     "sinon-chai": "^2.8.0",
     "yeoman-assert": "^2.2.1",
     "yeoman-test": "^1.4.0"
+  },
+  "nyc": {
+    "sourceMap": false,
+    "instrument": false,
+    "reporter": [
+      "lcov",
+      "text",
+      "text-summary"
+    ],
+    "include": [
+      "src/**/*.es6"
+    ],
+    "exclude": [
+      "tests/**/*"
+    ],
+    "all": true
   }
 }
