@@ -3,16 +3,8 @@ sudo: false
 node_js:
   - 6.4
 
-#matrix:
-  #allow_failures:
-    #- node_js: 5
-
-#services:
-  #- mongodb
-
 before_install:
   - npm i nsp -g
-  - npm install gulpjs/gulp-cli -g
 
 after_script:
   - nsp audit-package

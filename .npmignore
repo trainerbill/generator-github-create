@@ -2,6 +2,9 @@
 .editorconfig
 .eslintrc
 .gitignore
-gulpfile.babel.js
-index.es6
+.travis.yml
+.yo-rc.json
 src/
+tests/
+coverage/
+.nyc_output
