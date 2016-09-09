@@ -22,8 +22,7 @@
     "generators/authenticate",
     "generators/create",
     "generators/orgs",
-    "generators/gitinit",
-    "generators/gitpush",
+    "generators/shared",
     "generators/readme"
   ],
   "engines": {
@@ -34,7 +33,7 @@
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "build": "rm -rf ./generators && babel --out-dir ./generators --extensions .es6 --copy-files ./src/generators",
     "build:watch": "rm -rf ./generators && babel --watch --out-dir ./generators --extensions .es6 --copy-files ./src/generators",
-    "lint": "eslint --ignore-pattern **/templates ./test/**/*.js ./src/**/*.js",
+    "lint": "eslint --ignore-pattern **/templates ./test/**/*.js ./src/**/*.es6",
     "postversion": "git push && git push --tags && npm publish --access public",
     "release:patch": "npm test && npm run build && npm version patch",
     "release:minor": "npm test && npm run build && npm version minor",
@@ -55,6 +54,7 @@
   "homepage": "https://github.com/trainerbill/generator-github-create#readme",
   "dependencies": {
     "github": "^2.5.2",
+    "lodash.defaults": "^4.2.0",
     "lodash.find": "^4.6.0",
     "lodash.merge": "^4.6.0",
     "shelljs": "^0.7.4",

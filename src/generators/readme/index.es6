@@ -1,6 +1,7 @@
 import { Base } from 'yeoman-generator';
 import * as github from '../shared/github';
 import merge from 'lodash.merge';
+import defaults from 'lodash.defaults';
 
 
 class GithubReadmeGenerator extends Base {
@@ -26,65 +27,60 @@ class GithubReadmeGenerator extends Base {
       type: String,
       alias: 't',
       desc: 'Readme title',
-      defaults: createconfig ? createconfig.name : 'Generated Repository'
+      defaults: createconfig ? createconfig.name : undefined
     });
 
     this.option('description', {
       type: String,
       alias: 'd',
       desc: 'Readme title',
-      defaults: createconfig ? createconfig.description : 'Generated Repository'
+      defaults: createconfig ? createconfig.description : undefined
     });
 
     this.option('badges', {
       type: String,
       alias: 'b',
       desc: 'Comma delimited string of badges to enable',
-      defaults: ''
+    });
+
+    this.option('scoped', {
+      type: String,
+      alias: 'i',
+      desc: 'Package is an npm scoped package Ex: @modern-mean/server-base-module',
     });
 
     this.option('skip-prompt', {
       type: String,
       alias: 's',
-      desc: 'Skip prompting.  You will either need to supply all arguments or the defaults will be used.',
-      defaults: false
+      desc: 'Skip prompting.  You will either need to supply all arguments or the defaults will be used.'
     });
   }
 
   initializing() {
     this.allBadges = ['travis', 'coveralls','david','davidDev','gitter','npm'];
-    let config = {
-      'skip-prompt': this.options['skip-prompt'],
-      badges: this.options.badges.split(','),
-      profile: this.options.profile,
-      repository: this.options.repository,
-      title: this.options.title,
-      description: this.options.description
-    };
-    return this.config.set('readme', config);
+    this.options = defaults(this.options, this.config.get('readme'));
   }
 
   prompting() {
-    let config = this.config.get('readme');
-    if (config['skip-prompt']) {
+    if (this.options['skip-prompt']) {
       return true;
     }
 
     let prompts = [
       {
         name: 'title',
-        default: config.title,
+        default: this.options.title,
         message: 'README Title'
       },
       {
         name: 'description',
-        default: config.description,
+        default: this.options.description,
         message: 'README Description'
       },
       {
         type: 'confirm',
         name: 'usebadges',
-        default: config.usebadges || true,
+        default: this.options.usebadges,
         message: 'Create Badges?'
       },
       {
@@ -93,19 +89,26 @@ class GithubReadmeGenerator extends Base {
         name    : 'badges',
         message : 'Select badges to enable',
         choices : this.allBadges,
-        default : config.badges
+        default : this.options.badges
       },
       {
         when: (answers) => { return answers.usebadges; },
         name: 'profile',
-        default: config.profile,
+        default: this.options.profile,
         message: 'Badge Profile(user/org)'
       },
       {
         when: (answers) => { return answers.usebadges; },
         name: 'repository',
-        default: config.repository,
+        default: this.options.repository,
         message: 'Badge Repository'
+      },
+      {
+        when: (answers) => { return answers.badges.indexOf('npm') !== -1; },
+        type: 'confirm',
+        name: 'scoped',
+        default: this.options.scoped,
+        message: 'Is this package an NPM scoped package?  Ex: @modern-mean/server-base-module',
       }
     ];
 
@@ -130,7 +133,9 @@ class GithubReadmeGenerator extends Base {
         repository: config.repository,
         badges: config.badges,
         description: config.description,
-        title: config.title
+        title: config.title,
+        scoped: config.scoped ? `@${config.profile}/${config.repository}` : undefined,
+        scopedEncoded: config.scoped ? encodeURIComponent(`@${config.profile}/${config.repository}`) : undefined
       }
     );
 

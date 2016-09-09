@@ -6,6 +6,3 @@ npm-debug.log
 # Modern-MEAN app and assets
 .nyc_output/
 coverage/
-
-#Yeoman
-.yo-rc.json
