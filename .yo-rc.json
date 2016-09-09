@@ -1,0 +1,20 @@
+{
+  "generator-github-create": {
+    "readme": {
+      "title": "generator-github-create",
+      "description": "Yeoman generator for github authentication, create repository, README Badges, local git initialization, and local commit and push.",
+      "usebadges": true,
+      "badges": [
+        "travis",
+        "coveralls",
+        "david",
+        "davidDev",
+        "gitter",
+        "npm"
+      ],
+      "profile": "trainerbill",
+      "repository": "generator-github-create",
+      "scoped": false
+    }
+  }
+}

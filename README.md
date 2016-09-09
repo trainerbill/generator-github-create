@@ -1,11 +1,11 @@
-[![Join the chat at https://gitter.im/modern-mean](https://badges.gitter.im/modern-mean.svg)](https://gitter.im/modern-mean?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)&nbsp;[![npm version](https://badge.fury.io/js/generator-github-create.svg)](https://badge.fury.io/js/generator-github-create)&nbsp;[![dependencies Status](https://david-dm.org/trainerbill/generator-github-create/status.svg)](https://david-dm.org/trainerbill/generator-github-create)&nbsp;[![devDependencies Status](https://david-dm.org/trainerbill/generator-github-create/dev-status.svg)](https://david-dm.org/trainerbill/generator-github-create?type=dev)&nbsp;[![Build Status](https://travis-ci.org/trainerbill/generator-github-create.svg?branch=master)](https://travis-ci.org/trainerbill/generator-github-create)&nbsp;[![Coverage Status](https://coveralls.io/repos/github/trainerbill/generator-github-create/badge.svg?branch=master)](https://coveralls.io/github/trainerbill/generator-github-create?branch=master)
+[![Join the chat at https://gitter.im/trainerbill][gitter-image]][gitter-url]&nbsp;[![npm version][npm-image]][npm-url]&nbsp;[![dependencies Status][david-image]][david-url]&nbsp;[![devDependencies Status][davidDev-image]][davidDev-url]&nbsp;[![Build Status][travis-image]][travis-url]&nbsp;[![Coverage Status][coveralls-image]][coveralls-url]&nbsp;
 
-#Introduction
-Creates a github repository using Github apis.  <b>This generator does not store github password and does not delete repositories for good reason</b>
+#generator-github-create
+Yeoman generator for github authentication, create repository, README Badges, local git initialization, and local commit and push.
 
-#Install
+#Installation
 ```sh
-npm install -g generator-github-create
+$ npm install -g generator-github-create
 ```
 
 #Features
@@ -37,5 +37,25 @@ yo github-create:authenticate --help
 ```
 
 #Example
-Checkout the main generator to see how they all work together.
-https://github.com/trainerbill/generator-github-create/blob/master/src/generators/app/index.es6
+Checkout the these generators to see how they all work together.
+* https://github.com/modern-mean/generator-modern-mean/blob/master/src/generators/module/index.es6
+* https://github.com/trainerbill/generator-github-create/blob/master/src/generators/app/index.es6
+
+
+[gitter-image]: https://badges.gitter.im/trainerbill.svg
+[gitter-url]: https://gitter.im/trainerbill?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
+
+[npm-image]: https://badge.fury.io/js/%40modern-mean%2Fgenerator-github-create.svg
+[npm-url]: https://npmjs.org/package/%40modern-mean%2Fgenerator-github-create
+
+[travis-image]: https://travis-ci.org/trainerbill/generator-github-create.svg?branch=master
+[travis-url]: https://travis-ci.org/trainerbill/generator-github-create
+
+[david-image]: https://david-dm.org/trainerbill/generator-github-create/status.svg
+[david-url]: https://david-dm.org/trainerbill/generator-github-create
+
+[davidDev-image]: https://david-dm.org/trainerbill/generator-github-create/dev-status.svg
+[davidDev-url]: https://david-dm.org/trainerbill/generator-github-create?type=dev
+
+[coveralls-image]: https://coveralls.io/repos/github/trainerbill/generator-github-create/badge.svg?branch=master
+[coveralls-url]: https://coveralls.io/github/trainerbill/generator-github-create?branch=master
