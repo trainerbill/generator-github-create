@@ -51,13 +51,13 @@ function authenticate(user, pass) {
   });
 }
 
-function getAuthorization(config) {
+function getAuthorization(appName) {
   return new Promise((resolve, reject) => {
     github.authorization.getAll({ page: '1', per_page: '100' }, (err, auths) => {
       if (err) {
         return reject(err);
       }
-      let authorization = (0, _lodash.find)(auths, { app: { name: config.appName } }) || undefined;
+      let authorization = (0, _lodash.find)(auths, { app: { name: appName } }) || undefined;
       return resolve(authorization);
     });
   });
@@ -79,19 +79,12 @@ function deleteAuthorization(authorization) {
 
 function createAuthorization(config, twofactorcode) {
   return new Promise((resolve, reject) => {
-    let setup = {
-      scopes: config.scopes,
+    github.authorization.create({
+      scopes: config.scopes.split(',').map(item => item.trim()),
       note: config.appName,
-      note_url: config.appUrl
-    };
-
-    if (twofactorcode) {
-      setup.headers = {
-        'X-GitHub-OTP': twofactorcode
-      };
-    }
-
-    github.authorization.create(setup, (err, res) => {
+      note_url: config.appUrl,
+      headers: twofactorcode ? { 'X-GitHub-OTP': twofactorcode } : undefined
+    }, (err, res) => {
       if (err) {
         return reject(err);
       }

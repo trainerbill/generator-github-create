@@ -75,11 +75,8 @@ function saveUsername(username) {
   });
 }
 
-function gitInit(config) {
+function gitInit() {
   return new Promise((resolve, reject) => {
-    if (!config.init) {
-      return resolve(config);
-    }
     if (!_shelljs2.default.which('git')) {
       return reject('This script requires local git installed!');
     }
@@ -87,16 +84,13 @@ function gitInit(config) {
       if (code !== 0) {
         return reject(stderr);
       }
-      return resolve(config);
+      return resolve();
     });
   });
 }
 
 function gitRemote(config) {
   return new Promise((resolve, reject) => {
-    if (!config.init) {
-      return resolve(config);
-    }
     if (!_shelljs2.default.which('git')) {
       return reject('This script requires local git installed!');
     }

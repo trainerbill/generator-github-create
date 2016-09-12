@@ -1,6 +1,5 @@
 export let readme = {
   src: '../src/generators/readme',
-  deps: [],
   prompts: {
     title: 'Repository Title',
     description: 'Repository Description',
@@ -10,22 +9,13 @@ export let readme = {
       'travis',
       'coveralls',
       'gitter',
-      'david',
-      'davidDev'
+      'david'
     ],
     profile: 'test-profile',
     repository: 'test-repository',
-    scoped: true
+    scoped: false
   },
-  options: {
-    title: 'Repository Title',
-    description: 'Repository Description',
-    usebadges: true,
-    badges: 'npm,travis,coveralls,gitter,david,davidDev',
-    profile: 'test-profile',
-    repository: 'test-repository'
-  },
-  save: {
+  config: {
     'generator-github-create': {
       'readme': {
         'title': 'Repository Title',
@@ -36,38 +26,14 @@ export let readme = {
           'coveralls',
           'gitter',
           'david',
-          'davidDev'
         ],
         'profile': 'test-profile',
-        'repository': 'test-repository',
-        'scoped': true
+        'repository': 'test-repository'
       }
     }
   }
 };
 
-export let orgs = {
-  src: '../src/generators/orgs',
-  deps: [
-    [helpers.createDummyGenerator(), 'github-create:authenticate']
-  ],
-  prompts: {
-    'skip-prompt': false,
-    use: true,
-    org: 'test-org'
-  },
-  options: {
-    'skip-prompt': false,
-    org: 'test-org'
-  },
-  save: {
-    'generator-github-create': {
-      'orgs': {
-        'org': 'test-org'
-      }
-    }
-  }
-};
 
 export let authenticate = {
   src: '../src/generators/authenticate',
@@ -76,27 +42,22 @@ export let authenticate = {
     saveuser: true,
     password: 'testpassword',
     twofactor: true,
-    twofactorcode: 'asdf'
+    twofactorcode: 'twofactorcode'
   },
   options: {
-    debug: false
+    debug: false,
+    host: 'api.github.com',
+    protocol: 'https',
+    path: '',
+    twofactor: false,
+    scopes: 'user,public_repo,repo,repo:status',
+    appName: 'generator-github-create',
+    appUrl: 'https://github.com/trainerbill/generator-github-create'
   },
-  save: {
+  config: {
     'generator-github-create': {
       'authenticate': {
-        'github': {
-          'debug': false,
-          'host': 'api.github.com',
-          'protocol': 'https',
-          'pathPrefix': '/',
-          'headers': {
-            'user-agent': 'generator-github-create'
-          },
-          'scopes': 'user,public_repo,repo,repo:status'
-        },
         'username': 'testuser',
-        'appName': 'generator-github-create',
-        'appUrl': 'https://github.com/trainerbill/generator-github-create',
         'twofactor': true
       }
     }
@@ -105,10 +66,8 @@ export let authenticate = {
 
 export let create = {
   src: '../src/generators/create',
-  deps: [
-    [helpers.createDummyGenerator(), 'github-create:authenticate']
-  ],
-  prompts: {
+  prompts:{
+    useOrg: false,
     name: 'testrepository',
     description: 'Test Description',
     private: false,
@@ -117,14 +76,14 @@ export let create = {
   },
   options: {
     debug: false,
-    user: 'testuser',
+    username: 'testuser',
     name: 'testrepository',
     description: 'Test Description',
     private: false,
     init: true,
     push: true
   },
-  save: {
+  config: {
     'generator-github-create': {
       'create': {
         'name': 'testrepository',
@@ -132,7 +91,6 @@ export let create = {
         'private': false,
         'init': true,
         'push': true,
-        'user': 'testuser',
         'urls': [
           'https://test',
           'git@test'
@@ -142,62 +100,50 @@ export let create = {
   }
 };
 
-export let gitinit = {
-  src: '../src/generators/gitinit',
+export let pack = {
+  src: '../src/generators/package',
+  deps: [
+    [helpers.createDummyGenerator(), 'license:app'],
+  ],
   prompts: {
-    'skip-prompt': false,
-    name: 'origin',
-    url: 'testurl'
+    scoped: false,
+    name: 'test-package',
+    description: 'Test Package',
+    version: '0.0.1',
+    keywords: 'asdf, asdf',
+    author: 'Testy Mctest',
+    main: 'test/dir'
   },
   options: {
-    'skip-prompt': false,
-    name: 'origin'
+    license: false
   },
-  save: {
+  config: {
     'generator-github-create': {
-      'gitinit': {
-        'name': 'origin',
-        'url': 'testurl'
+      'package': {
+        'scoped': false,
+        'name': 'test-package',
+        'description': 'Test Package',
+        'version': '0.0.1',
+        'keywords': [
+          'asdf',
+          'asdf'
+        ],
+        'author': 'Testy Mctest',
+        'main': 'test/dir'
       }
     }
   }
 };
 
-export let gitpush = {
-  src: '../src/generators/gitpush',
-  prompts: {
-    'skip-prompt': false,
-    name: 'testorigin',
-    message: 'Test Message',
-    branch: 'branchy'
-  },
-  options: {
-    'skip-prompt': false,
-    name: 'testorigin',
-    message: 'Test Message',
-    branch: 'branchy'
-  },
-  save: {
-    'generator-github-create': {
-      'gitpush': {
-        'message': 'Test Message',
-        'name': 'testorigin',
-        'branch': 'branchy'
-      }
-    }
-  }
-};
 
 
 export let app = {
   src: '../src/generators/app',
   deps: [
     [helpers.createDummyGenerator(), 'github-create:authenticate'],
-    [helpers.createDummyGenerator(), 'github-create:orgs'],
     [helpers.createDummyGenerator(), 'github-create:create'],
     [helpers.createDummyGenerator(), 'github-create:readme'],
-    [helpers.createDummyGenerator(), 'github-create:gitinit'],
-    [helpers.createDummyGenerator(), 'github-create:gitpush']
+    [helpers.createDummyGenerator(), 'github-create:package']
   ],
   prompts: {
     'skip-prompt': false,

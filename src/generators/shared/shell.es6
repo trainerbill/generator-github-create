@@ -60,11 +60,8 @@ export function saveUsername(username) {
   });
 }
 
-export function gitInit(config) {
+export function gitInit() {
   return new Promise((resolve, reject) => {
-    if (!config.init) {
-      return resolve(config);
-    }
     if (!shell.which('git')) {
       return reject('This script requires local git installed!');
     }
@@ -72,16 +69,13 @@ export function gitInit(config) {
       if (code !== 0) {
         return reject(stderr);
       }
-      return resolve(config);
+      return resolve();
     });
   });
 }
 
 export function gitRemote(config) {
   return new Promise((resolve, reject) => {
-    if (!config.init) {
-      return resolve(config);
-    }
     if (!shell.which('git')) {
       return reject('This script requires local git installed!');
     }

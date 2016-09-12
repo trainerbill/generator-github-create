@@ -93,7 +93,7 @@ describe('shared/github.es6', () => {
       beforeEach(() => {
         authorization = { app: { name: 'testname' } };
         stub = sandbox.stub(githubModule.get().authorization, 'getAll').yields(null, [authorization]);
-        return githubModule.getAuthorization({ appName: 'testname' })
+        return githubModule.getAuthorization('testname')
           .then(auth => {
             found = auth;
           });
@@ -194,9 +194,10 @@ describe('shared/github.es6', () => {
 
       it('should call github.authorization.create', () => {
         return stub.should.have.been.calledWith({
-          scopes: 'scope, scope1',
+          scopes: ['scope', 'scope1'],
           note: 'testname',
-          note_url: 'noteurl'
+          note_url: 'noteurl',
+          headers: undefined
         });
       });
 
@@ -216,7 +217,7 @@ describe('shared/github.es6', () => {
 
       it('should call github.authorization.create', () => {
         return stub.should.have.been.calledWith({
-          scopes: 'scope, scope1',
+          scopes: ['scope', 'scope1'],
           note: 'testname',
           note_url: 'noteurl',
           headers: {

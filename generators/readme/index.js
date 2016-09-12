@@ -22,33 +22,29 @@ class GithubReadmeGenerator extends _yeomanGenerator.Base {
 
   constructor(...args) {
     super(...args);
-    let createconfig = this.config.get('create');
+
     this.option('profile', {
       type: String,
       alias: 'p',
-      desc: 'Profile for badge.  Ex: https://david-dm.org/<PROFILE>/server-express-module',
-      defaults: createconfig ? createconfig.org || createconfig.user : undefined
+      desc: 'Profile for badge.  Ex: https://david-dm.org/<PROFILE>/server-express-module'
     });
 
     this.option('repository', {
       type: String,
       alias: 'r',
-      desc: 'Repository.  Ex: https://david-dm.org/trainerbill/<REPOSITORY>',
-      defaults: createconfig ? createconfig.name : undefined
+      desc: 'Repository.  Ex: https://david-dm.org/trainerbill/<REPOSITORY>'
     });
 
     this.option('title', {
       type: String,
       alias: 't',
-      desc: 'Readme title',
-      defaults: createconfig ? createconfig.name : undefined
+      desc: 'Readme title'
     });
 
     this.option('description', {
       type: String,
       alias: 'd',
-      desc: 'Readme title',
-      defaults: createconfig ? createconfig.description : undefined
+      desc: 'Readme title'
     });
 
     this.option('badges', {
@@ -65,8 +61,16 @@ class GithubReadmeGenerator extends _yeomanGenerator.Base {
   }
 
   initializing() {
+    let createconfig = this.config.get('create');
     this.allBadges = ['travis', 'coveralls', 'david', 'davidDev', 'gitter', 'npm'];
-    this.options = (0, _lodash4.default)(this.options, this.config.get('readme'));
+    /* istanbul ignore next: dont know how to mock config from another gen */
+    this.options = (0, _lodash4.default)(this.options, this.config.get('readme'), {
+      profile: createconfig ? createconfig.org || createconfig.username : undefined,
+      repository: createconfig ? createconfig.name : undefined,
+      title: createconfig ? createconfig.name : undefined,
+      description: createconfig ? createconfig.description : undefined,
+      scoped: false
+    });
   }
 
   prompting() {
@@ -123,7 +127,7 @@ class GithubReadmeGenerator extends _yeomanGenerator.Base {
   }
 
   configuring() {
-    this.config.save();
+    return this.config.save();
   }
 
   writing() {

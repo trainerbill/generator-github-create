@@ -26,8 +26,7 @@ You can use the following methods to composeWith
 
 #Sub Generators
 * yo github-create:authentication - Authenticate to github
-* yo github-create:orgs - List the users orgs and let them choose
-* yo github-create:create - Create the github repository, initialize git, push initial commit.
+* yo github-create:create - the list user orgs, create github repository, initialize git, push initial commit.
 * yo github-create:readme - create readme / add badges
 
 #Usage

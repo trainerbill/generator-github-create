@@ -37,10 +37,6 @@ class GitGenerator extends _yeomanGenerator.Base {
         }
       });
     }
-
-    if (this.generators.indexOf('orgs') !== -1) {
-      this.composeWith('github-create:orgs');
-    }
   }
 
   default() {
