@@ -1,6 +1,6 @@
 {
   "name": "generator-github-create",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "Yeoman generator for github authentication, create repository, README Badges, local git initialization, and local commit and push.",
   "keywords": [
     "yeoman-generator",
